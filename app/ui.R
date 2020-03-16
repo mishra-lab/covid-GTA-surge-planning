@@ -45,8 +45,8 @@ hospitalParamsPanel <- function () {
 	)
 }
 
-transmissionParamsPanel <- function () {
-	tabPanel('Transmission',
+epidemiologyParamsPanel <- function () {
+	tabPanel('Epidemiology',
 		br(),
 		numericInput(
 			inputId = 'dur_latent',
@@ -199,7 +199,7 @@ ui <- fluidPage(
 			h3('Modelling Parameters', style='margin-top: 0;'),
 			tabsetPanel(
 				hospitalParamsPanel(),
-				transmissionParamsPanel(),
+				epidemiologyParamsPanel(),
 				interventionParamsPanel()
 			)
 		),
