@@ -194,7 +194,8 @@ ui <- fluidPage(
   	titlePanel('COVID-19 health-care surge model for GTA and GTA-area hospitals'),
   
   	# Sidebar layout with input and output definitions ----
-	sidebarLayout(# Sidebar panel for inputs ----
+	sidebarLayout(
+		# Sidebar panel for inputs ----
 		sidebarPanel(
 			h3('Modelling Parameters', style='margin-top: 0;'),
 			tabsetPanel(
@@ -204,6 +205,10 @@ ui <- fluidPage(
 			)
 		),
 
-	# Main panel for displaying outputs ----
-	mainPanel())
+		# Main panel for displaying outputs ----
+		mainPanel(
+			tableOutput('params'),
+			tableOutput('modelout')
+		)
+	)
 )
