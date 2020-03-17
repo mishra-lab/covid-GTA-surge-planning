@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(shinycssloaders)
 
 source('../model/vm.R')
 
