@@ -9,9 +9,5 @@ If you haven't already, install the R `shiny` package:
 install.packages('shiny')
 ```
 
-Then, run the following to start a local `shiny` server:
-
-```R
-library(shiny)
-runApp('src/app')
-```
+Then, run the `run_shiny.R` script. Your browser should automatically
+navigate to the app.
