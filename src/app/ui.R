@@ -1,4 +1,5 @@
 library(shiny)
+library(shinycssloaders)
 
 hospitalParamsPanel <- function () {
 	tabPanel('Hospital',
@@ -208,8 +209,8 @@ ui <- fluidPage(
 		# Main panel for displaying outputs ----
 		mainPanel(
 			# tableOutput('params'),
-			plotOutput('mainplot'),
-			tableOutput('modelout')
+			plotOutput('mainplot') %>% withSpinner(),
+			tableOutput('modelout') %>% withSpinner()
 		)
 	)
 )
