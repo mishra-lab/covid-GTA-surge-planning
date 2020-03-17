@@ -64,6 +64,46 @@ setupParams <- function (input) {
 	paramMat
 }
 
-runSimulation <- function (paramMat) {
-	epid(paramMat)
+runSimulation <- function (input, paramMat) {
+	modelout <- epid(paramMat)
+
+	######################################################################################################
+	# calculate daily true incidence (from cumulative incidence [subtract from previous day] CumIncid_tot)
+	# calculate daily detected cases (from cumulative diagnoses [subtract from previous day] Cumdx_tot)
+	# calculate daily ED visits      (from cumulative ED vistis and cumulative admissions, CumED_ct and CumAdmit)
+	######################################################################################################
+
+	DailyTrueIncid   <-diff(modelout$CumIncid_tot)
+	DailyDetCases    <-diff(modelout$Cumdx_tot)
+	DailyED_notadmit <-diff(modelout$CumED_ct)
+	DailyED_admit    <-diff(modelout$CumAdmit)
+
+	DailyTrueIncid   <-c(0,DailyTrueIncid) 
+	DailyDetCases    <-c(0,DailyDetCases)
+	DailyED_notadmit <-c(0,DailyED_notadmit)
+	DailyED_admit    <-c(0,DailyED_admit )
+
+	DailyED_total    <-DailyED_notadmit + DailyED_admit
+
+	modelout$DailyTrueIncid <- DailyTrueIncid 
+	modelout$DailyDetCases  <- DailyDetCases
+	modelout$DailyED_total  <- DailyED_total 
+
+	modelout$DailyED_total_hosp    <-modelout$DailyED_total * input$catchment_ED
+	modelout$I_ch_hosp             <-modelout$I_ch          * input$catchment_hosp
+	modelout$I_cicu_hosp           <-modelout$I_cicu        * input$catchment_hosp
+
+	output_cityhosp<-data.frame(
+		time = modelout$time,
+		DailyTrueIncid = modelout$DailyTrueIncid,
+		DailyDetCases = modelout$DailyDetCases,
+		DailyED_total = modelout$DailyED_total,
+		I_ch = modelout$I_ch,
+		I_cicu = modelout$I_cicu,
+		DailyED_total_hosp = modelout$DailyED_total_hosp,
+		I_ch_hosp = modelout$I_ch_hosp,
+		I_cicu_hosp = modelout$I_cicu_hosp
+	)
+
+	output_cityhosp
 }
