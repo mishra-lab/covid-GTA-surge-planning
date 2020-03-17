@@ -210,7 +210,7 @@ ui <- fluidPage(
 		# Main panel for displaying outputs ----
 		mainPanel(
 			# tableOutput('params'),
-			plotOutput('mainplot') %>% withSpinner(),
+			plotlyOutput('mainplot') %>% withSpinner(),
 			tableOutput('modelout') %>% withSpinner()
 		)
 	)
