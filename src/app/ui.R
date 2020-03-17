@@ -1,4 +1,5 @@
 library(shiny)
+library(dplyr)
 library(shinycssloaders)
 
 hospitalParamsPanel <- function () {
