@@ -1,7 +1,11 @@
 #################################################
 # vm.R - View Model
-# - Exposes functions to be used in server login
+# - Exposes functions to be used in server logic
 #################################################
+library(plotly)
+library(dplyr)
+library(reshape2)
+library(ggplot2)
 
 source('../model/epid.R')
 
@@ -106,4 +110,27 @@ runSimulation <- function (input, paramMat) {
 	)
 
 	output_cityhosp
+}
+
+generatePlot <- function (df) {
+	p = ggplot(
+		df, 
+		aes(
+			time, 
+			value, 
+			group = 1,
+			text = paste(
+				'Variable: ', series,
+				'<br>Time: ', time,
+				'<br>Value: ', format(value, digits = 1, scientific=FALSE)
+			)
+		),
+	) + 
+	theme(text = element_text(size = 10), legend.title = element_blank()) + 
+	geom_line(aes(colour = series))
+
+	ggplotly(
+		p,
+		tooltip = 'text'
+	) 
 }
