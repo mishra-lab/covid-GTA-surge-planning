@@ -207,7 +207,8 @@ ui <- fluidPage(
 
 		# Main panel for displaying outputs ----
 		mainPanel(
-			tableOutput('params'),
+			# tableOutput('params'),
+			plotOutput('mainplot'),
 			tableOutput('modelout')
 		)
 	)
