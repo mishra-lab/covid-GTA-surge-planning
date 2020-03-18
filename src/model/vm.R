@@ -124,10 +124,17 @@ generatePlot <- function (df) {
 				'<br>Time: ', time,
 				'<br>Value: ', format(value, digits = 1, scientific=FALSE)
 			)
-		),
+		)
 	) + 
-	theme(text = element_text(size = 10), legend.title = element_blank()) + 
-	geom_line(aes(colour = series))
+	theme(
+		text = element_text(size = 10), 
+		legend.title = element_blank()
+	) + 
+	geom_line(aes(colour = series)) +
+	labs(
+		x = 'Time (days)',
+		y = 'Number of cases'
+	)
 
 	ggplotly(
 		p,
