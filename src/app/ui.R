@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyjs)
 library(plotly)
 library(dplyr)
 library(shinycssloaders)
@@ -192,6 +193,7 @@ interventionParamsPanel <- function () {
 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
+	useShinyjs(),
 	# theme = 'main.css',
   	# App title ----
   	titlePanel('COVID-19 health-care surge model for GTA and GTA-area hospitals'),
@@ -212,7 +214,8 @@ ui <- fluidPage(
 		mainPanel(
 			# tableOutput('params'),
 			plotlyOutput('mainplot') %>% withSpinner(),
-			tableOutput('modelout') %>% withSpinner()
+			downloadButton('downloadCSV', label = 'Download CSV')
+			# tableOutput('modelout') %>% withSpinner()
 		)
 	)
 )
