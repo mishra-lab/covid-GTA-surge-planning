@@ -138,6 +138,7 @@ generatePlot <- function (df) {
 
 	ggplotly(
 		p,
-		tooltip = 'text'
+		tooltip = 'text',
+		dynamicTicks = TRUE
 	) 
 }
