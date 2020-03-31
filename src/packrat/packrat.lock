@@ -330,6 +330,12 @@ Version: 1.3-2
 Hash: a25c3f70c166fb3fbabc410eb32b6366
 Requires: backports
 
+Package: rsconnect
+Source: CRAN
+Version: 0.8.16
+Hash: 88c8ca5cd5688ce9dfa26be667cabff9
+Requires: curl, digest, jsonlite, openssl, packrat, rstudioapi, yaml
+
 Package: rstudioapi
 Source: CRAN
 Version: 0.10
