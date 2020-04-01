@@ -3,7 +3,7 @@
 # epid function, which sets the initial conditions [based on parmlist] and calls the solver to run the model
 library(deSolve)
 
-source('../model/covid_model_det.R')
+source('./model/covid_model_det.R')
 
 ###################################################################################################
 epid <-function(parmlist)
