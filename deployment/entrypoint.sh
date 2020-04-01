@@ -2,7 +2,7 @@
 
 echo "Installing R..."
 apt-get update
-apt-get install -y r-base r-base-dev r-cran-littler
+DEBIAN_FRONTEND=noninteractive apt-get install -y r-base r-base-dev r-cran-littler
 
 echo "Setting up shinyapps env..."
 # TODO: do we need this?
