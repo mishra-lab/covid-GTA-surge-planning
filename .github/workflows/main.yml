@@ -7,3 +7,6 @@ jobs:
         steps:
             - uses: actions/checkout@v1
             - uses: ./.github/actions/deployment
+              env:
+                SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+                SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
