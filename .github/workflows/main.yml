@@ -1,0 +1,9 @@
+name: Deployment workflow
+on: push
+jobs:
+    build:
+        name: shinyapps deployment
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: ./deployment
