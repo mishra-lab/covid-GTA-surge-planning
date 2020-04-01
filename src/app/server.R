@@ -5,7 +5,7 @@ library(dplyr)
 library(reshape2)
 library(ggplot2)
 
-source('../model/vm.R')
+source('./model/vm.R')
 
 # Define server logic ----
 server <- function(input, output) {

@@ -7,7 +7,7 @@ library(dplyr)
 library(reshape2)
 library(ggplot2)
 
-source('../model/epid.R')
+source('./model/epid.R')
 
 ###FIXED############################################################################################
 # number of days, eg. 300 days. fix interval = 1
