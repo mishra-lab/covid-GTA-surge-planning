@@ -12,7 +12,7 @@ rsconnect::setAccountInfo(name='mishra-lab',
     secret=SECRET
 )
 
-# TODO: try bundling ../model again...
+# TODO: figure out why we can't bundle model outside of app
 rsconnect::deployApp(
     appDir='./app',
     appName='covid-GTA-surge-planning',
