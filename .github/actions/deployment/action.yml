@@ -1,0 +1,11 @@
+name: 'shinyapps deployment'
+description: 'Deploys application to shinyapps.io'
+author: 'David Landsman'
+
+branding:
+    icon: 'upload-cloud'
+    color: 'blue'
+
+runs:
+    using: 'docker'
+    image: 'Dockerfile'
