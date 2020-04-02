@@ -1,7 +1,8 @@
 options(repos=c(CRAN='http://cran.rstudio.com/'))
 
-install.packages('devtools')
+install.packages('remotes')
 install.packages('packrat')
 
-packrat::restore()
-devtools::install_github('rstudio/rsconnect')
+# TODO: switch to renv, so we can pull installed packages from global lib
+renv::restore()
+remotes::install_github('rstudio/rsconnect')
