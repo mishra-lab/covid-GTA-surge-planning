@@ -62,7 +62,9 @@ setupParams <- function (input) {
 		length_of_stay,           		# note, a calculated parameter that could also be calculated inside the model function
 		Ncases_trigger = input$Ncases_trigger,           # number of detected cases that triggers the rise in testing
 		event_ss = input$event_ss,                 # number of super-spreading events
-		event_ss_modulo = input$event_ss_modulo	        # frequency of super-spreading events
+		event_ss_modulo = input$event_ss_modulo,	        # frequency of super-spreading events
+		baseline_inpt_perday = input$baseline_inpt_perday,
+		baseline_ICUpt_perday = input$baseline_ICUpt_perday
 	)
 
 	paramMat
@@ -77,42 +79,56 @@ runSimulation <- function (input, paramMat) {
 	# calculate daily ED visits      (from cumulative ED vistis and cumulative admissions, CumED_ct and CumAdmit)
 	######################################################################################################
 
-	DailyTrueIncid   <-diff(modelout$CumIncid_tot)
-	DailyDetCases    <-diff(modelout$Cumdx_tot)
-	DailyED_notadmit <-diff(modelout$CumED_ct)
-	DailyED_admit    <-diff(modelout$CumAdmit)
+	DailyTrueIncid   <- diff(modelout$CumIncid_tot)
+	DailyDetCases    <- diff(modelout$Cumdx_tot)
+	DailyED_notadmit <- diff(modelout$CumED_ct)
+	DailyED_admit    <- diff(modelout$CumAdmit)
 
-	DailyTrueIncid   <-c(0,DailyTrueIncid) 
-	DailyDetCases    <-c(0,DailyDetCases)
-	DailyED_notadmit <-c(0,DailyED_notadmit)
-	DailyED_admit    <-c(0,DailyED_admit )
+	DailyTrueIncid   <- c(0,DailyTrueIncid) 
+	DailyDetCases    <- c(0,DailyDetCases)
+	DailyED_notadmit <- c(0,DailyED_notadmit)
+	DailyED_admit    <- c(0,DailyED_admit )
 
-	DailyED_total    <-DailyED_notadmit + DailyED_admit
+	DailyED_total    <- DailyED_notadmit + DailyED_admit
 
 	modelout$DailyTrueIncid <- DailyTrueIncid 
 	modelout$DailyDetCases  <- DailyDetCases
 	modelout$DailyED_total  <- DailyED_total 
 
-	modelout$DailyED_total_hosp    <-modelout$DailyED_total * input$catchment_ED
-	modelout$I_ch_hosp             <-modelout$I_ch          * input$catchment_hosp
-	modelout$I_cicu_hosp           <-modelout$I_cicu        * input$catchment_hosp
+	modelout$DailyED_total_hosp    <- modelout$DailyED_total * input$catchment_ED
+	modelout$I_ch_hosp             <- modelout$I_ch          * input$catchment_hosp
+	modelout$I_cicu_hosp           <- modelout$I_cicu        * input$catchment_hosp
 
-	output_cityhosp<-data.frame(
+	output_cityhosp <- tibble::tibble(
 		time = modelout$time,
-		DailyTrueIncid = modelout$DailyTrueIncid,
-		DailyDetCases = modelout$DailyDetCases,
-		DailyED_total = modelout$DailyED_total,
-		I_ch = modelout$I_ch,
-		I_cicu = modelout$I_cicu,
-		DailyED_total_hosp = modelout$DailyED_total_hosp,
-		I_ch_hosp = modelout$I_ch_hosp,
-		I_cicu_hosp = modelout$I_cicu_hosp
+		'Daily True Incidence' = modelout$DailyTrueIncid,
+		'Daily Detected Cases' = modelout$DailyDetCases,
+		'Daily ED Total (GTA)' = modelout$DailyED_total,
+		'Isolated in hospital (GTA)' = modelout$I_ch,
+		'Isolated in ICU (GTA)' = modelout$I_cicu,
+		'Daily ED Total (catchment)' = modelout$DailyED_total_hosp,
+		'Isolated in hospital (catchment)' = modelout$I_ch_hosp,
+		'Isolated in ICU (catchment)' = modelout$I_cicu_hosp,
+		'Median occupied inpatient beds' = paramMat$baseline_inpt_perday,
+		'Median occupied ICU beds' = paramMat$baseline_ICUpt_perday
 	)
 
 	output_cityhosp
 }
 
-generatePlot <- function (df) {
+generatePlot <- function (modelout) {
+	df <- modelout %>% melt(
+		id.vars = 'time',
+		measure.vars = c(
+			'Daily ED Total (catchment)',
+			'Isolated in hospital (catchment)',
+			'Isolated in ICU (catchment)',
+			'Median occupied inpatient beds',
+			'Median occupied ICU beds'
+		),
+		variable.name = 'series'
+	)
+
 	p = ggplot(
 		df, 
 		aes(
