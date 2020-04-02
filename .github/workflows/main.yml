@@ -1,9 +1,10 @@
-name: Deployment workflow
-on: push
+name: Deployment
+on: push # TODO: change to pull-request closed
 jobs:
     build:
-        name: shinyapps deployment
+        name: shinyapps
         runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, 'ci skip')"
         steps:
             - uses: actions/checkout@v1
             - uses: ./.github/actions/deployment
