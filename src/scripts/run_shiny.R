@@ -5,4 +5,4 @@ options(
     shiny.autoreload.pattern = glob2rx("*.R"),
     shiny.launch.browser = TRUE
 )
-runApp('../app')
+runApp('./app')

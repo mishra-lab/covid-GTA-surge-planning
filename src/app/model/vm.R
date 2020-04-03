@@ -14,9 +14,9 @@ source('./model/epid.R')
 times <-seq(0,300,1) 
 
 ###FIXED################ external (e.g. imported cases as a time series) ###########################
-travel <-data.frame(times=times,import=rep(2,length(times))) #create an empty time-series of travel-related/imported cases
-travel$import <-ifelse(travel$times>15,3,2)  #fill in the time-series of travel-related/imported cases
-interp<-approxfun(travel,rule=2)  #create an interpolating function using approxfun
+travel <- data.frame(times=times,import=rep(2,length(times))) #create an empty time-series of travel-related/imported cases
+travel$import <- ifelse(travel$times>15,3,2)  #fill in the time-series of travel-related/imported cases
+interp<- approxfun(travel,rule=2)  #create an interpolating function using approxfun
 ####################################################################################################
 
 setupParams <- function (input) {
@@ -116,7 +116,7 @@ runSimulation <- function (input, paramMat) {
 	output_cityhosp
 }
 
-generatePlot <- function (modelout) {
+generateModelPlot <- function (modelout) {
 	df_cases <- modelout %>%
 	select(
 		'time',
@@ -126,11 +126,6 @@ generatePlot <- function (modelout) {
 	) %>%
 	melt(
 		id.vars = 'time',
-		# measure.vars = c(
-		# 	'Daily ED Total (catchment)',
-		# 	'Isolated in hospital (catchment)',
-		# 	'Isolated in ICU (catchment)'
-		# ),
 		variable.name = 'cases_series',
 		value.name = 'cases'
 	)
@@ -148,11 +143,6 @@ generatePlot <- function (modelout) {
 	)
 
 	df <- merge(df_cases, df_beds, by='time')
-
-	print(head(df))
-	print(tail(df))
-
-	# df <- modelout
 
 	p = ggplot(
 		df,
@@ -199,4 +189,8 @@ generatePlot <- function (modelout) {
 		# tooltip = 'text',
 		dynamicTicks = TRUE
 	) 
+}
+
+getSensitivityPlots <- function () {
+	list.files(path='./www', pattern='admitted_')
 }
