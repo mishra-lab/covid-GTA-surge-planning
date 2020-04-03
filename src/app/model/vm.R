@@ -117,44 +117,86 @@ runSimulation <- function (input, paramMat) {
 }
 
 generatePlot <- function (modelout) {
-	df <- modelout %>% melt(
+	df_cases <- modelout %>%
+	select(
+		'time',
+		'Daily ED Total (catchment)',
+		'Isolated in hospital (catchment)',
+		'Isolated in ICU (catchment)'
+	) %>%
+	melt(
 		id.vars = 'time',
-		measure.vars = c(
-			'Daily ED Total (catchment)',
-			'Isolated in hospital (catchment)',
-			'Isolated in ICU (catchment)',
-			'Median occupied inpatient beds',
-			'Median occupied ICU beds'
-		),
-		variable.name = 'series'
+		# measure.vars = c(
+		# 	'Daily ED Total (catchment)',
+		# 	'Isolated in hospital (catchment)',
+		# 	'Isolated in ICU (catchment)'
+		# ),
+		variable.name = 'cases_series',
+		value.name = 'cases'
 	)
 
+	df_beds <- modelout %>%
+	select(
+		'time',
+		'Median occupied inpatient beds',
+		'Median occupied ICU beds'
+	) %>%
+	melt(
+		id.vars = 'time',
+		variable.name = 'beds_series',
+		value.name = 'beds'
+	)
+
+	df <- merge(df_cases, df_beds, by='time')
+
+	print(head(df))
+	print(tail(df))
+
+	# df <- modelout
+
 	p = ggplot(
-		df, 
+		df,
 		aes(
-			time, 
-			value, 
-			group = 1,
-			text = paste(
-				'Variable: ', series,
-				'<br>Time: ', time,
-				'<br>Value: ', format(value, digits = 1, scientific=FALSE)
-			)
+			time,
+			cases,
+			colour = cases_series,
+			# group = 1,
+			# text = paste(
+			# 	'Variable: ', cases_series,
+			# 	'<br>Time: ', time,
+			# 	'<br>Value: ', format(cases, digits = 1, scientific=FALSE)
+			# )
 		)
+	) + 
+	geom_line() + 
+	geom_line(
+		aes(
+			time,
+			beds,
+			colour = beds_series,
+			# group = 1,
+			# text = paste(
+			# 	'Variable: ', beds_series,
+			# 	'<br>Time: ', time,
+			# 	'<br>Value: ', format(beds, digits = 1, scientific=FALSE)
+			# )
+		),
+		linetype = 'dashed',
+		# group = 2
+	) +
+	labs(
+		x = 'Time (days)',
+		y = 'Number of cases'
 	) + 
 	theme(
 		text = element_text(size = 10), 
 		legend.title = element_blank()
-	) + 
-	geom_line(aes(colour = series)) +
-	labs(
-		x = 'Time (days)',
-		y = 'Number of cases'
 	)
 
 	ggplotly(
 		p,
-		tooltip = 'text',
+		tooltip = NULL, # TODO: fix tooltip to show correct series
+		# tooltip = 'text',
 		dynamicTicks = TRUE
 	) 
 }
