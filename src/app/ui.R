@@ -191,16 +191,12 @@ interventionParamsPanel <- function () {
 	)
 }
 
-# Define UI for app that draws a histogram ----
 ui <- fluidPage(
 	useShinyjs(),
 	# theme = 'main.css',
-  	# App title ----
-  	titlePanel('COVID-19 health-care surge model for GTA and GTA-area hospitals'),
+  	titlePanel('COVID-19 Healthcare Surge Model for Greater Toronto Area Hospitals'),
   
-  	# Sidebar layout with input and output definitions ----
 	sidebarLayout(
-		# Sidebar panel for inputs ----
 		sidebarPanel(
 			h3('Modelling Parameters', style='margin-top: 0;'),
 			tabsetPanel(
@@ -209,13 +205,18 @@ ui <- fluidPage(
 				interventionParamsPanel()
 			)
 		),
-
-		# Main panel for displaying outputs ----
+		
 		mainPanel(
-			# tableOutput('params'),
-			plotlyOutput('mainplot') %>% withSpinner(),
-			downloadButton('downloadCSV', label = 'Download CSV')
-			# tableOutput('modelout') %>% withSpinner()
+			wellPanel(
+				h3('Modelling Output', style='margin-top: 0;'),
+				plotlyOutput('modelPlot') %>% withSpinner(),
+				br(),
+				downloadButton('downloadCSV', label = 'Download model output as CSV')
+			),
+			wellPanel(
+				h3('Sensitivity Analysis', style='margin-top: 0;'),
+				uiOutput('parameterTabs')
+			)
 		)
 	)
 )
