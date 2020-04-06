@@ -38,5 +38,5 @@ server <- function (input, output, session) {
 	}
 
 	# Render matching page UI
-	source(sprintf('./pages/%s.R', pageName), local=TRUE)
+	source(sprintf('./pages/%s/main.R', pageName), local=TRUE)
 }

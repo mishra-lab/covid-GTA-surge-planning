@@ -2,16 +2,12 @@
 # vm.R - View Model
 # - Exposes functions to be used in server logic
 #################################################
-library(plotly)
-library(dplyr)
-library(reshape2)
-library(ggplot2)
 
-source('./model/epid.R')
+import::from('./model/epid.R', epid)
 
 ###FIXED############################################################################################
 # number of days, eg. 300 days. fix interval = 1
-times <-seq(0,300,1) 
+times <- seq(0,300,1) 
 
 ###FIXED################ external (e.g. imported cases as a time series) ###########################
 travel <- data.frame(times=times,import=rep(2,length(times))) #create an empty time-series of travel-related/imported cases
@@ -127,34 +123,34 @@ runSimulation <- function (input, paramMat) {
 }
 
 generateModelPlot <- function (modelout) {
-	fig <- plot_ly(modelout, x=~time)
-	fig <- fig %>% add_trace(
+	fig <- plotly::plot_ly(modelout, x=~time)
+	fig <- fig %>% plotly::add_trace(
 		y=~DailyED_total_hosp, 
 		name='Daily ED Total (catchment)',
 		mode='lines', 
 		type='scatter'
 	)
-	fig <- fig %>% add_trace(
+	fig <- fig %>% plotly::add_trace(
 		y=~I_ch_hosp, 
 		name='Isolated in hospital (catchment)',
 		mode='lines', 
 		type='scatter'
 	)
-	fig <- fig %>% add_trace(
+	fig <- fig %>% plotly::add_trace(
 		y=~I_cicu_hosp, 
 		name='Isolated in ICU (catchment)',
 		mode='lines', 
 		type='scatter'
 	)
 
-	fig <- fig %>% add_trace(
+	fig <- fig %>% plotly::add_trace(
 		y=~baseline_inpt_perday, 
 		name='Median occupied inpatient beds',
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
 	)
-	fig <- fig %>% add_trace(
+	fig <- fig %>% plotly::add_trace(
 		y=~baseline_ICUpt_perday, 
 		name='Median occupied ICU beds',
 		mode='lines', 
@@ -162,10 +158,12 @@ generateModelPlot <- function (modelout) {
 		line=list(dash='dash')
 	)
 
-	fig <- fig %>% layout(
+	fig <- fig %>% plotly::layout(
 		xaxis=list(title='Time (days)'),
 		yaxis=list(title='Number of cases', hoverformat='.0f')
 	)
+
+	fig
 }
 
 getSensitivityPlots <- function () {
