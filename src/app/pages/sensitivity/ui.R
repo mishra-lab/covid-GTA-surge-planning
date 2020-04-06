@@ -1,3 +1,5 @@
+import::from(tidyr, '%>%')
+
 ui <- fluidPage(
   	shiny::titlePanel('COVID-19 Healthcare Surge Model: Sensitivity Analysis'),
 	shiny::br(),
