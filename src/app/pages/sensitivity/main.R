@@ -27,3 +27,7 @@ output$parameterTabs <- shiny::renderUI({
 	}
 	do.call(shiny::tabsetPanel, tabs)
 })
+
+# data <- read.csv('./data/test.csv', colClasses=c('NULL', NA, 'NULL', NA))
+data <- read.csv('./data/oneway_sensitivity.csv.gz', nrows=1, header=FALSE)#, colClasses=c('NULL', NA, 'NULL', NA))
+print(head(data))

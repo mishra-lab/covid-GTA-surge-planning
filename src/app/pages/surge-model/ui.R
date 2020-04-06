@@ -188,10 +188,9 @@ interventionParamsPanel <- function () {
 }
 
 ui <- fluidPage(
-# ui <- fluidPage(
 	shinyjs::useShinyjs(),
-	# theme = 'main.css',
-  	shiny::titlePanel('COVID-19 Healthcare Surge Model for Greater Toronto Area Hospitals'),
+  	shiny::titlePanel('COVID-19 Healthcare Surge Model'),
+	shiny::br(),
   
 	shiny::sidebarLayout(
 		shiny::sidebarPanel(
@@ -208,8 +207,6 @@ ui <- fluidPage(
 				shiny::h3('Modelling Output', style='margin-top: 0;'),
 				plotly::plotlyOutput('modelPlot') %>% shinycssloaders::withSpinner(),
 				shiny::br(),
-
-				# shiny::downloadButton('downloadCSV', label = 'Download model output as CSV')
 				shiny::uiOutput('downloadUI')
 			)
 		)
