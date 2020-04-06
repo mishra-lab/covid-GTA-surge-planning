@@ -9,11 +9,13 @@ params <- shiny::reactive({setupParams(input)})
 modelout <- shiny::reactive({runSimulation(input, params())})
 output$modelPlot <- plotly::renderPlotly(generateModelPlot(modelout()))
 
-# Add model results for download
-shiny::observe({
-	# shinyjs::toggleState('downloadCSV', !is.null(modelout()))
-	# print(modelout())
+# Create button for downloading CSV; displayed only when modelout
+# is computed
+output$downloadUI <- shiny::renderUI({
+	req(modelout())
+	do.call(shiny::downloadButton, list('downloadCSV', 'Download model output as CSV'))
 })
+
 output$downloadCSV <- shiny::downloadHandler(
 	filename = 'model_results.csv',
 	content = function(file) {

@@ -208,7 +208,9 @@ ui <- fluidPage(
 				shiny::h3('Modelling Output', style='margin-top: 0;'),
 				plotly::plotlyOutput('modelPlot') %>% shinycssloaders::withSpinner(),
 				shiny::br(),
-				shiny::downloadButton('downloadCSV', label = 'Download model output as CSV')
+
+				# shiny::downloadButton('downloadCSV', label = 'Download model output as CSV')
+				shiny::uiOutput('downloadUI')
 			)
 		)
 	)
