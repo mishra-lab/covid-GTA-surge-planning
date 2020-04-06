@@ -97,16 +97,6 @@ runSimulation <- function (input, paramMat) {
 
 	output_cityhosp <- tibble::tibble(
 		time = modelout$time,
-		# 'Daily True Incidence' = modelout$DailyTrueIncid,
-		# 'Daily Detected Cases' = modelout$DailyDetCases,
-		# 'Daily ED Total (GTA)' = modelout$DailyED_total,
-		# 'Isolated in hospital (GTA)' = modelout$I_ch,
-		# 'Isolated in ICU (GTA)' = modelout$I_cicu,
-		# 'Daily ED Total (catchment)' = modelout$DailyED_total_hosp,
-		# 'Isolated in hospital (catchment)' = modelout$I_ch_hosp,
-		# 'Isolated in ICU (catchment)' = modelout$I_cicu_hosp,
-		# 'Median occupied inpatient beds' = paramMat$baseline_inpt_perday,
-		# 'Median occupied ICU beds' = paramMat$baseline_ICUpt_perday
 		DailyTrueIncid = modelout$DailyTrueIncid,
 		DailyDetCases = modelout$DailyDetCases,
 		DailyED_total = modelout$DailyED_total,
@@ -166,6 +156,37 @@ generateModelPlot <- function (modelout) {
 	fig
 }
 
-getSensitivityPlots <- function () {
-	list.files(path='./www', pattern='admitted_')
+readSensitivity <- function (input) {
+	selectedParameter <- input$parameterSelect
+
+	# Figure out which column to import based on selectedParameter
+	header <- read.csv('./data/oneway_sensitivity.csv.gz', nrows=1, header=FALSE)
+	selectedIdx <- which(header == selectedParameter)[[1]]
+	outcomeIdx <- which(header == 'I_ch')[[1]]
+	timeIdx <- which(header == 'time')[[1]]
+	colClasses <- rep('NULL', length(header))
+
+	colClasses[[selectedIdx]] <- NA
+	colClasses[[outcomeIdx]] <- NA
+	colClasses[[timeIdx]] <- NA
+
+	# Read data, importing only necessary columns
+	data <- read.csv('./data/oneway_sensitivity.csv.gz', colClasses=colClasses)
+	data
+}
+
+generateSensitivityPlot <- function (data) {
+	print(head(data))
+
+	fig <- data %>%
+		dplyr::filter(time <= 90, prob_test != 0.1) %>%
+		plotly::plot_ly(
+			x=~time, 
+			y=~I_ch * 0.1, 
+			color=~prob_test,
+			split=~prob_test, 
+			mode='lines',
+			showlegend=FALSE
+		) %>%
+		plotly::colorbar(title='prob_test')
 }
