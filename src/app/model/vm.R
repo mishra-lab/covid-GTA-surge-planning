@@ -101,94 +101,71 @@ runSimulation <- function (input, paramMat) {
 
 	output_cityhosp <- tibble::tibble(
 		time = modelout$time,
-		'Daily True Incidence' = modelout$DailyTrueIncid,
-		'Daily Detected Cases' = modelout$DailyDetCases,
-		'Daily ED Total (GTA)' = modelout$DailyED_total,
-		'Isolated in hospital (GTA)' = modelout$I_ch,
-		'Isolated in ICU (GTA)' = modelout$I_cicu,
-		'Daily ED Total (catchment)' = modelout$DailyED_total_hosp,
-		'Isolated in hospital (catchment)' = modelout$I_ch_hosp,
-		'Isolated in ICU (catchment)' = modelout$I_cicu_hosp,
-		'Median occupied inpatient beds' = paramMat$baseline_inpt_perday,
-		'Median occupied ICU beds' = paramMat$baseline_ICUpt_perday
+		# 'Daily True Incidence' = modelout$DailyTrueIncid,
+		# 'Daily Detected Cases' = modelout$DailyDetCases,
+		# 'Daily ED Total (GTA)' = modelout$DailyED_total,
+		# 'Isolated in hospital (GTA)' = modelout$I_ch,
+		# 'Isolated in ICU (GTA)' = modelout$I_cicu,
+		# 'Daily ED Total (catchment)' = modelout$DailyED_total_hosp,
+		# 'Isolated in hospital (catchment)' = modelout$I_ch_hosp,
+		# 'Isolated in ICU (catchment)' = modelout$I_cicu_hosp,
+		# 'Median occupied inpatient beds' = paramMat$baseline_inpt_perday,
+		# 'Median occupied ICU beds' = paramMat$baseline_ICUpt_perday
+		DailyTrueIncid = modelout$DailyTrueIncid,
+		DailyDetCases = modelout$DailyDetCases,
+		DailyED_total = modelout$DailyED_total,
+		I_ch = modelout$I_ch,
+		I_cicu = modelout$I_cicu,
+		DailyED_total_hosp = modelout$DailyED_total_hosp,
+		I_ch_hosp = modelout$I_ch_hosp,
+		I_cicu_hosp = modelout$I_cicu_hosp,
+		baseline_inpt_perday = paramMat$baseline_inpt_perday,
+		baseline_ICUpt_perday = paramMat$baseline_ICUpt_perday
 	)
 
 	output_cityhosp
 }
 
 generateModelPlot <- function (modelout) {
-	df_cases <- modelout %>%
-	select(
-		'time',
-		'Daily ED Total (catchment)',
-		'Isolated in hospital (catchment)',
-		'Isolated in ICU (catchment)'
-	) %>%
-	melt(
-		id.vars = 'time',
-		variable.name = 'cases_series',
-		value.name = 'cases'
+	fig <- plot_ly(modelout, x=~time)
+	fig <- fig %>% add_trace(
+		y=~DailyED_total_hosp, 
+		name='Daily ED Total (catchment)',
+		mode='lines', 
+		type='scatter'
+	)
+	fig <- fig %>% add_trace(
+		y=~I_ch_hosp, 
+		name='Isolated in hospital (catchment)',
+		mode='lines', 
+		type='scatter'
+	)
+	fig <- fig %>% add_trace(
+		y=~I_cicu_hosp, 
+		name='Isolated in ICU (catchment)',
+		mode='lines', 
+		type='scatter'
 	)
 
-	df_beds <- modelout %>%
-	select(
-		'time',
-		'Median occupied inpatient beds',
-		'Median occupied ICU beds'
-	) %>%
-	melt(
-		id.vars = 'time',
-		variable.name = 'beds_series',
-		value.name = 'beds'
+	fig <- fig %>% add_trace(
+		y=~baseline_inpt_perday, 
+		name='Median occupied inpatient beds',
+		mode='lines', 
+		type='scatter', 
+		line=list(dash='dash')
+	)
+	fig <- fig %>% add_trace(
+		y=~baseline_ICUpt_perday, 
+		name='Median occupied ICU beds',
+		mode='lines', 
+		type='scatter', 
+		line=list(dash='dash')
 	)
 
-	df <- merge(df_cases, df_beds, by='time')
-
-	p = ggplot(
-		df,
-		aes(
-			time,
-			cases,
-			colour = cases_series,
-			# group = 1,
-			# text = paste(
-			# 	'Variable: ', cases_series,
-			# 	'<br>Time: ', time,
-			# 	'<br>Value: ', format(cases, digits = 1, scientific=FALSE)
-			# )
-		)
-	) + 
-	geom_line() + 
-	geom_line(
-		aes(
-			time,
-			beds,
-			colour = beds_series,
-			# group = 1,
-			# text = paste(
-			# 	'Variable: ', beds_series,
-			# 	'<br>Time: ', time,
-			# 	'<br>Value: ', format(beds, digits = 1, scientific=FALSE)
-			# )
-		),
-		linetype = 'dashed',
-		# group = 2
-	) +
-	labs(
-		x = 'Time (days)',
-		y = 'Number of cases'
-	) + 
-	theme(
-		text = element_text(size = 10), 
-		legend.title = element_blank()
+	fig <- fig %>% layout(
+		xaxis=list(title='Time (days)'),
+		yaxis=list(title='Number of cases', hoverformat='.0f')
 	)
-
-	ggplotly(
-		p,
-		tooltip = NULL, # TODO: fix tooltip to show correct series
-		# tooltip = 'text',
-		dynamicTicks = TRUE
-	) 
 }
 
 getSensitivityPlots <- function () {
