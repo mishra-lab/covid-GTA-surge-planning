@@ -1,50 +1,42 @@
-library(shiny)
-library(shinyjs)
-library(plotly)
-library(dplyr)
-library(reshape2)
-library(ggplot2)
+server <- function (input, output, session) {
+	validPages <- c('home', 'surge-model', 'sensitivity')
+	names(validPages) <- c('Home', 'Surge Model', 'Sensitivity Analysis')
+	headerStr <- ''
 
-source('./model/vm.R')
-
-server <- function(input, output) {
-	# Run model and generate plot
-	params <- reactive({setupParams(input)})
-	modelout <- reactive({runSimulation(input, params())})
-	output$modelPlot <- renderPlotly(generateModelPlot(modelout()))
-
-	# Add model results for download
-	observe({
-		toggleState('downloadCSV', !is.null(modelout()))
-	})
-	output$downloadCSV <- downloadHandler(
-		filename = 'model_results.csv',
-		content = function(file) {
-			write.csv(modelout(), file, row.names = FALSE)
-		}
-	)
-
-	# Populate sensitivity analyses
-	output$parameterTabs <- renderUI({
-		files <- getSensitivityPlots()
-		
-		tabs <- list()
-		for (i in 1:length(files)) {
-			f <- files[[i]]
-			tabTitle <- gsub('admitted_(.*)_90.png', '\\1', f)
-			
-			# Create tabPanel containing the plot
-			tabs[[i]] <- tabPanel(
-				tabTitle,
-				br(),
-				img(
-					src=f, 
-					width='55%', 
-					height='55%', 
-					style='margin-left: auto; margin-right: auto; display: block;'
-				)
+	# Build up header HTML
+	for (i in 1:length(validPages)) {
+		headerStr <- paste(
+			headerStr, 
+			sprintf(
+				'<a href="?%s">%s</a><br>', 
+				validPages[[i]],
+				names(validPages)[[i]]
 			)
-		}
-		do.call(tabsetPanel, tabs)
-	})
+		)
+	}
+
+	# Render header and page
+	output$stub <- shiny::renderUI(shiny::tagList(
+		shiny::fluidPage(
+			shiny::fluidRow(
+				shiny::HTML('<h3>', headerStr, '</h3>')
+			),
+			shiny::uiOutput('pageStub')
+		)
+	))
+
+	# Parse query string
+	pageName <- shiny::isolate(session$clientData$url_search)
+	pageName <- substr(pageName, 2, nchar(pageName))
+	if (pageName == '') {
+		pageName <- 'home'
+	}
+	
+	# 404 if page not found
+	if (!pageName %in% validPages) {
+		pageName <- 'not-found'
+	}
+
+	# Render matching page UI
+	source(sprintf('./pages/%s.R', pageName), local=TRUE)
 }
