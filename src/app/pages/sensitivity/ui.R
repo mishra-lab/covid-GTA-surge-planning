@@ -1,9 +1,6 @@
 import::from(tidyr, '%>%')
 
 ui <- fluidPage(
-  	shiny::titlePanel('COVID-19 Healthcare Surge Model: Sensitivity Analysis'),
-	shiny::br(),
-
 	shiny::sidebarLayout(
 		shiny::sidebarPanel(
 			shiny::h3('Model Parameters', style='margin-top: 0;'),
