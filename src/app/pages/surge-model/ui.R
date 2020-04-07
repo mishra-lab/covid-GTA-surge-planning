@@ -188,10 +188,6 @@ interventionParamsPanel <- function () {
 }
 
 ui <- fluidPage(
-	shinyjs::useShinyjs(),
-  	shiny::titlePanel('COVID-19 Healthcare Surge Model'),
-	shiny::br(),
-  
 	shiny::sidebarLayout(
 		shiny::sidebarPanel(
 			shiny::h3('Modelling Parameters', style='margin-top: 0;'),

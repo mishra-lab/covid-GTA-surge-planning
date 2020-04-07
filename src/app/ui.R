@@ -23,6 +23,7 @@ ui <- shiny::tagList(
     shinyjs::useShinyjs(),
     shiny::bootstrapPage(
         shiny::HTML(navbarStr),
-        shiny::uiOutput('pageStub')
+        shiny::uiOutput('pageStub'),
+        theme='flatly.min.css'
     )
 )
