@@ -59,6 +59,8 @@ setupParams <- function (input) {
 		Ncases_trigger = input$Ncases_trigger,           # number of detected cases that triggers the rise in testing
 		event_ss = input$event_ss,                 # number of super-spreading events
 		event_ss_modulo = input$event_ss_modulo,	        # frequency of super-spreading events
+		inpatient_bed_max = input$inpatient_bed_max,
+		ICU_bed_max = input$ICU_bed_max,
 		baseline_inpt_perday = input$baseline_inpt_perday,
 		baseline_ICUpt_perday = input$baseline_ICUpt_perday
 	)
@@ -105,6 +107,8 @@ runSimulation <- function (input, paramMat) {
 		DailyED_total_hosp = modelout$DailyED_total_hosp,
 		I_ch_hosp = modelout$I_ch_hosp,
 		I_cicu_hosp = modelout$I_cicu_hosp,
+		inpatient_bed_max = paramMat$inpatient_bed_max,
+		ICU_bed_max = paramMat$ICU_bed_max,
 		baseline_inpt_perday = paramMat$baseline_inpt_perday,
 		baseline_ICUpt_perday = paramMat$baseline_ICUpt_perday
 	)
@@ -134,15 +138,15 @@ generateModelPlot <- function (modelout) {
 	)
 
 	fig <- fig %>% plotly::add_trace(
-		y=~baseline_inpt_perday, 
-		name='Median occupied inpatient beds',
+		y=~inpatient_bed_max, 
+		name='Inpatient bed capacity',
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
 	)
 	fig <- fig %>% plotly::add_trace(
-		y=~baseline_ICUpt_perday, 
-		name='Median occupied ICU beds',
+		y=~ICU_bed_max, 
+		name='ICU bed capacity',
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
