@@ -1,29 +1,14 @@
-validPages <- c('surge-model', 'sensitivity')
-names(validPages) <- c('Run Model', 'Sensitivity Analysis')
-navbarStr <- readr::read_file('./templates/navbar.html')
-headerStr <- ''
-
-# Build up header HTML
-for (i in 1:length(validPages)) {
-    headerStr <- paste(
-        headerStr, 
-        sprintf(
-            '<li id="%s"><a href="?%s">%s</a></li>', 
-            validPages[[i]],
-            validPages[[i]],
-            names(validPages)[[i]]
-        )
-    )
-}
-
-# Fill-in header
-navbarStr <- sprintf(navbarStr, headerStr)
+# TODO: maybe there's a better way to do this? programatically import all ui parts necessary
+import::from('./pages/surge-model/ui.R', surgeModelUI)
+import::from('./pages/sensitivity/ui.R', sensitivityUI)
 
 ui <- shiny::tagList(
     shinyjs::useShinyjs(),
-    shiny::bootstrapPage(
-        shiny::HTML(navbarStr),
-        shiny::uiOutput('pageStub'),
-        theme='flatly.min.css'
+    shiny::navbarPage(
+        id='navbar',
+        theme='flatly.min.css',
+        'COVID-19 Healthcare Surge Model',
+        shiny::tabPanel(id='surge-model', 'Run Model', surgeModelUI()),
+        shiny::tabPanel(id='sensitivity', 'Sensitivity Analysis', sensitivityUI())
     )
 )

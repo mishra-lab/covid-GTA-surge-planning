@@ -1,8 +1,4 @@
 import::from('./vm.R', setupParams, runSimulation, generateModelPlot)
-import::from('./pages/surge-model/ui.R', ui)
-
-# Load ui components
-output$pageStub <- shiny::renderUI(ui)
 
 # Server functionality
 params <- shiny::reactive({setupParams(input)})
