@@ -175,22 +175,27 @@ readSensitivity <- function (input) {
 	colClasses[[timeIdx]] <- NA
 
 	# Read data, importing only necessary columns
-	data <- read.csv('./data/oneway_sensitivity.csv.gz', colClasses=colClasses)
+	data <- tibble::tibble(read.csv('./data/oneway_sensitivity.csv.gz', colClasses=colClasses))
+	default <- read.csv('./data/default.csv')
+
+	# Cut to 90 days, and remove default value of selectedParameter
+	data <- data %>%
+		dplyr::filter(time <= 90, data[[selectedParameter]] != unique(default[[selectedParameter]]))
+
 	data
 }
 
-generateSensitivityPlot <- function (data) {
-	print(head(data))
+generateSensitivityPlot <- function (data, input) {
+	selectedParameter <- input$parameterSelect
 
 	fig <- data %>%
-		dplyr::filter(time <= 90, prob_test != 0.1) %>%
 		plotly::plot_ly(
 			x=~time, 
-			y=~I_ch * 0.1, 
-			color=~prob_test,
-			split=~prob_test, 
+			y=~I_ch * input$catchmentProp, 
+			color=~data[[selectedParameter]],
+			split=~data[[selectedParameter]], 
 			mode='lines',
 			showlegend=FALSE
 		) %>%
-		plotly::colorbar(title='prob_test')
+		plotly::colorbar(title=selectedParameter)
 }
