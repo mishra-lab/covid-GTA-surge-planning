@@ -4,4 +4,7 @@ server <- function (input, output, session) {
 		source('./pages/sensitivity/server.R', local=TRUE)
 		source('./pages/surge-model/server.R', local=TRUE)
 	})
+
+	### TODO: remove
+	shiny::updateTabsetPanel(session, 'navbar', 'sensitivity')
 }

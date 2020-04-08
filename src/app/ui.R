@@ -8,7 +8,7 @@ ui <- shiny::tagList(
         id='navbar',
         theme='flatly.min.css',
         'COVID-19 Healthcare Surge Model',
-        shiny::tabPanel(id='surge-model', 'Run Model', surgeModelUI()),
-        shiny::tabPanel(id='sensitivity', 'Sensitivity Analysis', sensitivityUI())
+        shiny::tabPanel(value='surge-model', 'Run Model', surgeModelUI()),
+        shiny::tabPanel(value='sensitivity', 'Sensitivity Analysis', sensitivityUI())
     )
 )
