@@ -191,6 +191,12 @@ readSensitivity <- function (input, default) {
 
 generateSensitivityPlot <- function (input, data) {
 	selectedParameter <- input$parameterSelect
+	paramRange <- input$parameterRange
+	print(paramRange)
+
+	if (!is.null(paramRange)) {
+		data <- data %>% dplyr::filter(dplyr::between(data[[selectedParameter]], paramRange[[1]], paramRange[[2]]))
+	}
 
 	fig <- data %>%
 		plotly::plot_ly(
@@ -208,6 +214,6 @@ generateSensitivityPlot <- function (input, data) {
 		) %>%
 		plotly::layout(
 			xaxis=list(title='Days since outbreak started\n(local transmission)'),
-			yaxis=list(title='Number of COVID-19 cases in catchment', hoverformat='.0f')
+			yaxis=list(title='Number of COVID-19 cases in catchment area', hoverformat='.0f')
 		)
 }
