@@ -27,6 +27,8 @@ sensitivityUI <- function () {
 			shiny::mainPanel(
 				shiny::wellPanel(
 					shiny::h3('Sensitivity Analysis Plot', style='margin-top: 0;'),
+					br(),
+					shiny::uiOutput('paramRangeUI'),
 					plotly::plotlyOutput('sensitivityPlot') %>% shinycssloaders::withSpinner(),
 				)
 			)

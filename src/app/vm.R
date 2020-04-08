@@ -160,7 +160,12 @@ generateModelPlot <- function (modelout) {
 	fig
 }
 
-readSensitivity <- function (input) {
+readDefault <- function () {
+	default <- read.csv('./data/default.csv')
+	default
+}
+
+readSensitivity <- function (input, default) {
 	selectedParameter <- input$parameterSelect
 
 	# Figure out which column to import based on selectedParameter
@@ -176,7 +181,6 @@ readSensitivity <- function (input) {
 
 	# Read data, importing only necessary columns
 	data <- tibble::tibble(read.csv('./data/oneway_sensitivity.csv.gz', colClasses=colClasses))
-	default <- read.csv('./data/default.csv')
 
 	# Cut to 90 days, and remove default value of selectedParameter
 	data <- data %>%
@@ -185,17 +189,25 @@ readSensitivity <- function (input) {
 	data
 }
 
-generateSensitivityPlot <- function (data, input) {
+generateSensitivityPlot <- function (input, data) {
 	selectedParameter <- input$parameterSelect
 
 	fig <- data %>%
 		plotly::plot_ly(
 			x=~time, 
 			y=~I_ch * input$catchmentProp, 
+			type='scatter',
 			color=~data[[selectedParameter]],
-			split=~data[[selectedParameter]], 
+			split=~data[[selectedParameter]],
+			colors=c('yellow', 'red'), 
 			mode='lines',
 			showlegend=FALSE
 		) %>%
-		plotly::colorbar(title=selectedParameter)
+		plotly::colorbar(
+			title=selectedParameter
+		) %>%
+		plotly::layout(
+			xaxis=list(title='Days since outbreak started\n(local transmission)'),
+			yaxis=list(title='Number of COVID-19 cases in catchment', hoverformat='.0f')
+		)
 }
