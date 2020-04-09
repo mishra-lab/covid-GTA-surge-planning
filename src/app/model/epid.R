@@ -1,10 +1,8 @@
 # COVID model
 # Updated March 15, 2020
 # epid function, which sets the initial conditions [based on parmlist] and calls the solver to run the model
-library(deSolve)
 
-source('./model/covid_model_det.R')
-
+import::from('./covid_model_det.R', covid_model_det)
 ###################################################################################################
 epid <-function(parmlist)
 {
@@ -35,7 +33,7 @@ epid <-function(parmlist)
 		
 	)  
 
-	out_fxn <- as.data.frame(lsoda(xstart_fxn,times,covid_model_det,parmlist))  #run the model
+	out_fxn <- as.data.frame(deSolve::lsoda(xstart_fxn,times,covid_model_det,parmlist))  #run the model
 	out_fxn <- merge(out_fxn, parmlist)                                         #merge the parmlist with model outputs
 	return(out_fxn)
 }
