@@ -192,7 +192,6 @@ readSensitivity <- function (input, default) {
 generateSensitivityPlot <- function (input, data) {
 	selectedParameter <- input$parameterSelect
 	paramRange <- input$parameterRange
-	print(paramRange)
 
 	if (!is.null(paramRange)) {
 		data <- data %>% dplyr::filter(dplyr::between(data[[selectedParameter]], paramRange[[1]], paramRange[[2]]))

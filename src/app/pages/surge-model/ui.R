@@ -191,7 +191,7 @@ surgeModelUI <- function () {
 	ui <- fluidPage(
 		shiny::sidebarLayout(
 			shiny::sidebarPanel(
-				shiny::h3('Modelling Parameters', style='margin-top: 0;'),
+				shiny::h3('Modeling Parameters', style='margin-top: 0;'),
 				shiny::tabsetPanel(
 					hospitalParamsPanel(),
 					epidemiologyParamsPanel(),
@@ -201,7 +201,7 @@ surgeModelUI <- function () {
 			
 			shiny::mainPanel(
 				shiny::wellPanel(
-					shiny::h3('Modelling Output', style='margin-top: 0;'),
+					shiny::h3('Modeling Output', style='margin-top: 0;'),
 					plotly::plotlyOutput('modelPlot') %>% shinycssloaders::withSpinner(),
 					shiny::br(),
 					shiny::uiOutput('downloadUI')
