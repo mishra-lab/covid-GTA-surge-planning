@@ -17,8 +17,12 @@ sensitivityUI <- function () {
 					'parameterSelect',
 					'parameter for plotting sensitivity analysis',
 					c(
-						'prob_test',
+						'seed_prop',
 						'prob_admit',
+						'drop_Reffective',
+						'dur_admitted',
+						'social_distancing',
+						'prob_test_max',
 						'R0'
 					)
 				)

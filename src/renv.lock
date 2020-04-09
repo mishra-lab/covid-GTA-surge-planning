@@ -502,6 +502,13 @@
       "Repository": "CRAN",
       "Hash": "a56d058adfc9df30bdd45dbb01cec39f"
     },
+    "shinyBS": {
+      "Package": "shinyBS",
+      "Version": "0.61",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f895dafd39733c4a70d425f605a832e7"
+    },
     "shinycssloaders": {
       "Package": "shinycssloaders",
       "Version": "0.3",

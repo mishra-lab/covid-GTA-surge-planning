@@ -8,16 +8,8 @@ output$sensitivityPlot <- plotly::renderPlotly(generateSensitivityPlot(input, se
 output$paramRangeUI <- shiny::renderUI({
     req(sensData())
 
-    paramMin <- round(min(sensData()[[input$parameterSelect]]), digits=2)
-    paramMax <- round(max(sensData()[[input$parameterSelect]]), digits=2)
-
-    minDec <- getNumberOfDecimals(paramMin)
-    maxDec <- getNumberOfDecimals(paramMax)
-
-    # Adjust the min/max a little bit to show the full range in case of 
-    # rounding error
-    paramMin <- paramMin - 10 ^ (-minDec)
-    paramMax <- paramMax + 10 ^ (-maxDec)
+    paramMin <- min(sensData()[[input$parameterSelect]])
+    paramMax <- max(sensData()[[input$parameterSelect]])
 
     do.call(shiny::sliderInput, list(
         'parameterRange',
