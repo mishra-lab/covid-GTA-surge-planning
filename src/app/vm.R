@@ -85,18 +85,18 @@ setupParams <- function (input) {
 		length_of_stay,           # note, a calculated parameter that could also be calculated inside the model function
 		Ncases_trigger,           # number of detected cases that triggers the rise in testing
 		event_ss = input$event_ss,                 # number of super-spreading events
-		event_ss_modulo = input$event_ss_modulo,	        # frequency of super-spreading events
-		inpatient_bed_max = input$inpatient_bed_max,
-		ICU_bed_max = input$ICU_bed_max,
-		baseline_inpt_perday = input$baseline_inpt_perday,
-		baseline_ICUpt_perday = input$baseline_ICUpt_perday
+		event_ss_modulo = input$event_ss_modulo	        # frequency of super-spreading events
+		# inpatient_bed_max = input$inpatient_bed_max,
+		# ICU_bed_max = input$ICU_bed_max,
+		# baseline_inpt_perday = input$baseline_inpt_perday,
+		# baseline_ICUpt_perday = input$baseline_ICUpt_perday
 	)
 
 	paramMat
 }
 
-runSimulation <- function (input, paramMat) {
-	modelout <- epid(paramMat)
+runSimulation <- function (paramMat) {
+	modelOut <- epid(paramMat)
 
 	######################################################################################################
 	# calculate daily true incidence (from cumulative incidence [subtract from previous day] CumIncid_tot)
@@ -104,10 +104,10 @@ runSimulation <- function (input, paramMat) {
 	# calculate daily ED visits      (from cumulative ED vistis and cumulative admissions, CumED_ct and CumAdmit)
 	######################################################################################################
 
-	DailyTrueIncid   <- diff(modelout$CumIncid_tot)
-	DailyDetCases    <- diff(modelout$Cumdx_tot)
-	DailyED_notadmit <- diff(modelout$CumED_ct)
-	DailyED_admit    <- diff(modelout$CumAdmit)
+	DailyTrueIncid   <- diff(modelOut$CumIncid_tot)
+	DailyDetCases    <- diff(modelOut$Cumdx_tot)
+	DailyED_notadmit <- diff(modelOut$CumED_ct)
+	DailyED_admit    <- diff(modelOut$CumAdmit)
 
 	DailyTrueIncid   <- c(0,DailyTrueIncid) 
 	DailyDetCases    <- c(0,DailyDetCases)
@@ -116,33 +116,37 @@ runSimulation <- function (input, paramMat) {
 
 	DailyED_total    <- DailyED_notadmit + DailyED_admit
 
-	modelout$DailyTrueIncid <- DailyTrueIncid 
-	modelout$DailyDetCases  <- DailyDetCases
-	modelout$DailyED_total  <- DailyED_total 
+	modelOut$DailyTrueIncid <- DailyTrueIncid 
+	modelOut$DailyDetCases  <- DailyDetCases
+	modelOut$DailyED_total  <- DailyED_total
 
-	modelout$DailyED_total_hosp    <- modelout$DailyED_total * input$catchment_ED
-	modelout$I_ch_hosp             <- modelout$I_ch          * input$catchment_hosp
-	modelout$I_cicu_hosp           <- modelout$I_cicu        * input$catchment_hosp
+	modelOut$DailyED_total_hosp    <- modelOut$DailyED_total * input$catchment_ED
+	modelOut$I_ch_hosp             <- modelOut$I_ch          * input$catchment_hosp
+	modelOut$I_cicu_hosp           <- modelOut$I_cicu        * input$catchment_hosp
 
+	modelOut
+}
+
+generatePlotData <- function (input, modelOut) {
 	output_cityhosp <- tibble::tibble(
-		'time (in days)' = modelout$time,
-		'daily true incidence' = modelout$DailyTrueIncid,
-		'daily detected cases' = modelout$DailyDetCases,
-		'daily ED visits, city-level' = modelout$DailyED_total,
-		'number of non-ICU inpatients, city-level' = modelout$I_ch,
-		'number of ICU patients, city-level' = modelout$I_cicu,
-		'daily ED visits, hospital' = modelout$DailyED_total_hosp,
-		'number of non-ICU inpatients, hospital' = modelout$I_ch_hosp,
-		'number of ICU patients, hospital' = modelout$I_cicu_hosp,
-		'non-ICU inpatient bed capacity' = paramMat$inpatient_bed_max,
-		'ICU patient bed capacity' = paramMat$ICU_bed_max
+		'time (in days)' = modelOut$time,
+		'daily true incidence' = modelOut$DailyTrueIncid,
+		'daily detected cases' = modelOut$DailyDetCases,
+		'daily ED visits, city-level' = modelOut$DailyED_total,
+		'number of non-ICU inpatients, city-level' = modelOut$I_ch,
+		'number of ICU patients, city-level' = modelOut$I_cicu,
+		'daily ED visits, hospital' = modelOut$DailyED_total_hosp,
+		'number of non-ICU inpatients, hospital' = modelOut$I_ch_hosp,
+		'number of ICU patients, hospital' = modelOut$I_cicu_hosp,
+		'non-ICU inpatient bed capacity' = input$inpatient_bed_max,
+		'ICU patient bed capacity' = input$ICU_bed_max
 	)
 
 	output_cityhosp
 }
 
-generateModelPlot <- function (modelout) {
-	fig <- plotly::plot_ly(modelout, x=~`time (in days)`)
+generateModelPlot <- function (modelOut) {
+	fig <- plotly::plot_ly(modelOut, x=~`time (in days)`)
 	fig <- fig %>% plotly::add_trace(
 		y=~`daily ED visits, hospital`, 
 		name='daily ED visits, hospital',
