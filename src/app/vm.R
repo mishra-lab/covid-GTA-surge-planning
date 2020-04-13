@@ -10,19 +10,43 @@ import::from('./model/epid.R', epid)
 times <- seq(0,300,1) 
 
 ###FIXED################ external (e.g. imported cases as a time series) ###########################
-travel <- data.frame(times=times,import=rep(2,length(times))) #create an empty time-series of travel-related/imported cases
-travel$import <- ifelse(travel$times>15,3,2)  #fill in the time-series of travel-related/imported cases
-interp<- approxfun(travel,rule=2)  #create an interpolating function using approxfun
+# @@@ imported cases read in from csv file = travel.csv, which comprise a linear extrapolation 
+# we assume that imported cases continue via linear growth until our own epidemic peaks, thereafter zero imported cases
+parm_import <- 'import_ON'
+travel_read <- read.csv(file='./data/travel.csv', header=TRUE)
+travel <- data.frame(times=times, import=rep(0, length(times)))
+travel[2:nrow(travel),] <- data.frame(travel_read$times, travel_read[names(travel_read) == parm_import])
+interp <- approxfun(travel, rule=2)  #create an interpolating function using approxfun
 ####################################################################################################
 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+# testing # [FIXED]
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+# baseline proportion of non-severe who are tested if present to health-care facility or self-isolate
+tau_1 <- 0.02     
+# baseline proportion of hospitalized who are tested
+tau_2 <- 0.6       
+# maximum proportion tested among non-severe who present to health-care facility or self-isolate, after cases trigger increase in testing
+tau_1_max <- 0.6      
+# maximum proportion tested among hospitalized, after cases trigger increase in testing
+tau_2_max <- 0.9    
+# number of cases detected (non-severe or severe) that trigger an increase in testing
+Ncases_trigger <- 31
+
 setupParams <- function (input) {
+	# duration of subclinical
+	dur_subclinical = input$dur_incubation - input$dur_latent
+
 	# duration of infectiousness
-	dur_inf = input$dur_subclinical + input$dur_symptomatic
+	dur_inf = dur_subclinical + input$dur_symptomatic
+
+	# probability of admission among all infected
+	prob_admit = input$prob_admit_diagnosed * input$prob_diagnosed
 
     # convert to transition rates
 	beta = input$R0 / dur_inf                      # transmission probability per capita
 	omega = 1 / input$dur_latent                   # latency rate from exposure to infectious per capita
-	alpha = 1 / input$dur_subclinical              # progression rate from subclinical to clinical per capita
+	alpha = 1 / dur_subclinical              # progression rate from subclinical to clinical per capita
 	g1 = 1 / input$dur_symptomatic                 # rate of recovery while symptomatic but not admitted
 	g2 = 1 / input$dur_admitted                    # rate of recover/discharge while admitted
 	g3 = 1 / input$dur_icu                         # rate of leaving ICU to medicine ward
@@ -42,21 +66,23 @@ setupParams <- function (input) {
 		g2,                       		# rate of recover/discharge while admitted
 		g3,                       		# rate of recovery/discharge while in icu
 		prob_test = input$prob_test,                # probability of testing+detection once clinical symptoms
-		prob_admit = input$prob_admit,               # probability of admission once symptomatic (assuming also tested)
+		prob_admit,              # probability of admission among all infected
 		rate_icu,                 		# rate of icu admission once admitted
 		death_rate,               		# disease-attributable mortality rate
-		drop_Reffective = input$drop_Reffective,          # factor by who much Reffective drops after outbreak takes off
-		R0 = input$R0,                       # included here for ease of adding to the outputs
-		seed_backCalc = input$seed_backCalc,            # initial seeding number
+		drop_Reffective = input$drop_Reffective,  # factor by who much Reffective drops after outbreak takes off
+		R0 = input$R0,                       	  # included here for ease of adding to the outputs
+		seed_backCalc = input$seed_backCalc,      # initial seeding number
 		initpop = input$initpop,                  # popualtion size of Toronto
 		prop_travel_test = input$prop_travel_test,         # proportion travelers with COVID + symptoms who get tested/detected
-		social_distancing = input$social_distancing,        # time in days from seeding, when social distancing measures reduce beta by "drop_Reffective"
-		tau_1 = input$tau_1,                    # probability of testing patients [who do not need to be admitted] in the absence of travel history or epidemiological link
-		tau_2 = input$tau_2,                    # probability of testing inpatients for COVID in the absence of travel history or epidemiological link
-		tau_1_max = input$tau_1_max,                # increase rate to this probability of testing patients [who do not need to be admitted] in the absence of travel history or epidemiological link
-		tau_2_max = input$tau_2_max,                # increase rate to this probability of testing inpatients for COVID in the absence of travel history or epidemiological link. but probability will not be 100%
-		length_of_stay,           		# note, a calculated parameter that could also be calculated inside the model function
-		Ncases_trigger = input$Ncases_trigger,           # number of detected cases that triggers the rise in testing
+		social_distancing = input$social_distancing,       # time in days from seeding, when social distancing measures reduce beta by "drop_Reffective"
+		tau_1,                    # probability of testing patients [who do not need to be admitted] in the absence of travel history or epidemiological link
+		tau_2,                    # probability of testing inpatients for COVID in the absence of travel history or epidemiological link
+		tau_1_max,                # increase rate to this probability of testing patients [who do not need to be admitted] in the absence of travel history or epidemiological link
+		tau_2_max,                # increase rate to this probability of testing inpatients for COVID in the absence of travel history or epidemiological link. but probability will not be 100%
+		when_test_increase = input$when_test_increase 	   # days after oubtreak starts, when proportion detected or self-isolate increased via more case detection
+		prob_test_max = input$prob_test_max				   # maximum proportion detected or self-isolate after time = when_test_increase
+		length_of_stay,           # note, a calculated parameter that could also be calculated inside the model function
+		Ncases_trigger,           # number of detected cases that triggers the rise in testing
 		event_ss = input$event_ss,                 # number of super-spreading events
 		event_ss_modulo = input$event_ss_modulo,	        # frequency of super-spreading events
 		inpatient_bed_max = input$inpatient_bed_max,
