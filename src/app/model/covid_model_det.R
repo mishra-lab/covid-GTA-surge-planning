@@ -5,7 +5,7 @@
 
 ###############################################################################
 # define model (10 states, each with differential equation, plus 2 additional 'tracking' states)
-covid_model_det <- function(t,x,parms){ 
+covid_model_det <- function(t, x, parms){ 
 	
 	# name all the state-variables in ODE but also 
 	# include calculated state-variables (e.g. N_contact) so that can
@@ -68,7 +68,7 @@ covid_model_det <- function(t,x,parms){
 		############# external (or imported) cases ######################nb: imported cases immediately subtracted from S
 		# assumption = imported cases drop to zero as soon as epidemic peaks (i.e. Reffective <=1)
 		if ((R0 * (S / N_contact) > 1)) {
-			imported <- input(t)
+			imported <- interp(t)
 		} else {
 			imported <- 0
 		}

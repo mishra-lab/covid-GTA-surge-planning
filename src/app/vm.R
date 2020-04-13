@@ -79,8 +79,8 @@ setupParams <- function (input) {
 		tau_2,                    # probability of testing inpatients for COVID in the absence of travel history or epidemiological link
 		tau_1_max,                # increase rate to this probability of testing patients [who do not need to be admitted] in the absence of travel history or epidemiological link
 		tau_2_max,                # increase rate to this probability of testing inpatients for COVID in the absence of travel history or epidemiological link. but probability will not be 100%
-		when_test_increase = input$when_test_increase 	   # days after oubtreak starts, when proportion detected or self-isolate increased via more case detection
-		prob_test_max = input$prob_test_max				   # maximum proportion detected or self-isolate after time = when_test_increase
+		when_test_increase = input$when_test_increase,	# days after oubtreak starts, when proportion detected or self-isolate increased via more case detection
+		prob_test_max = input$prob_test_max,			# maximum proportion detected or self-isolate after time = when_test_increase
 		length_of_stay,           # note, a calculated parameter that could also be calculated inside the model function
 		Ncases_trigger,           # number of detected cases that triggers the rise in testing
 		event_ss = input$event_ss,                 # number of super-spreading events
