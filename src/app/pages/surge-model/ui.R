@@ -51,22 +51,29 @@ epidemiologyParamsPanel <- function () {
 		shiny::numericInput(
 			inputId = 'dur_latent',
 			label = 'length of exposure (latent) period in days when infected but not infectious',
-			value = 1.5
+			value = 2.0
 		),
 		shiny::numericInput(
-			inputId = 'dur_subclinical',
+			inputId = 'dur_incubation',
 			label = 'duration (days) of subclinical prior to onset of clinical symptoms which would lead',
-			value = 1.5
+			value = 5.2
 		),
 		shiny::numericInput(
 			inputId = 'dur_symptomatic',
 			label = 'duration (days) symptomatic and infectious [if not isolated] when not severe prior to recovery',
-			value = 6.0
+			value = 7.0
+		),
+		shiny::sliderInput(
+			inputId = 'prob_diagnosed',
+			label = 'proportion of symptomatic',
+			value = 0.55,
+			min = 0,
+			max = 1
 		),
 		shiny::numericInput(
 			inputId = 'dur_admitted',
 			label = 'duration (days) symptomatic and infectious [if not isolated] when hospitalized prior to recovery [and excluding those who died/ICU]',
-			value = 8
+			value = 12
 		),
 		shiny::numericInput(
 			inputId = 'dur_icu',
@@ -74,7 +81,7 @@ epidemiologyParamsPanel <- function () {
 			value = 8
 		),
 		shiny::sliderInput(
-			inputId = 'prob_admit',
+			inputId = 'prob_admit_diagnosed',
 			label = 'proportion who are admitted to hospital among those infected',
 			value = 0.1,
 			min = 0,
@@ -118,9 +125,23 @@ interventionParamsPanel <- function () {
 		shiny::sliderInput(
 			inputId = 'prob_test',
 			label = 'proportion of non-severe, symptomatic who get tested/detected or self-isolate without testing',
-			value = 0.3,
+			value = 0.1,
 			min = 0,
 			max = 1
+		),
+		shiny::sliderInput(
+			inputId = 'prob_test_max',
+			label = 'proportion of testing under increased case detection',
+			value = 0.2,
+			min = 0,
+			max = 1
+		),
+		shiny::sliderInput(
+			inputId = 'when_test_increase',
+			label = 'on which day after the outbreak starts does case detection increase?',
+			value = 40,
+			min = 1,
+			max = 300
 		),
 		shiny::sliderInput(
 			inputId = 'prop_travel_test',
@@ -131,48 +152,15 @@ interventionParamsPanel <- function () {
 		),
 		shiny::sliderInput(
 			inputId = 'drop_Reffective',
-			label = 'by who much does social distancing reduce contact rates?',
+			label = 'by how much does social distancing reduce contact rates?',
 			value = 0.2,
 			min = 0,
 			max = 1
 		),
 		shiny::numericInput(
 			inputId = 'social_distancing',
-			label = 'delay (days) in starting social distancing from start of outbreak',
+			label = 'on which day after the outbreak starts does social distancing begin?',
 			value = 20
-		),
-		shiny::sliderInput(
-			inputId = 'tau_1',
-			label = 'baseline proportion of non-severe who are tested if present to health-care facility or self-isolate',
-			value = 0.02,
-			min = 0,
-			max = 1
-		),
-		shiny::sliderInput(
-			inputId = 'tau_2',
-			label = 'baseline proportion of hospitalized who are tested',
-			value = 0.02,
-			min = 0,
-			max = 1
-		),
-		shiny::sliderInput(
-			inputId = 'tau_1_max',
-			label = 'maximum proportion tested among non-severe who present to health-care facility or self-isolate, after cases trigger increase in testing',
-			value = 0.6,
-			min = 0,
-			max = 1
-		),
-		shiny::sliderInput(
-			inputId = 'tau_2_max',
-			label = 'maximum proportion tested among hospitalized, after cases trigger increase in testing',
-			value = 0.9,
-			min = 0,
-			max = 1
-		),
-		shiny::numericInput(
-			inputId = 'Ncases_trigger',
-			label = 'number of cases detected (non-severe or severe) that trigger an increase in testing',
-			value = 5
 		),
 		shiny::numericInput(
 			inputId = 'event_ss',
@@ -181,7 +169,7 @@ interventionParamsPanel <- function () {
 		),
 		shiny::numericInput(
 			inputId = 'event_ss_modulo',
-			label = 'frequency of super-spreading events (e.g. every X days)',
+			label = 'number of days between super-spreading events',
 			value = 11
 		),
 	)

@@ -12,57 +12,66 @@ covid_model_det <- function(t,x,parms){
 	# use within the model function to change parameters conditional on the value of a state-variable as well
 	
 	# ODE variables
-	S             <-x[1]
-	E             <-x[2]
-	I_sc          <-x[3]      
-	I_c           <-x[4]    
-	I_ct          <-x[5]    
-	I_ch          <-x[6]   
-	I_cicu        <-x[7]    
-	death         <-x[8]  
-	R             <-x[9]  
-	R_ct          <-x[10]
+	S             <- x[1]
+	E             <- x[2]
+	I_sc          <- x[3]      
+	I_c           <- x[4]    
+	I_ct          <- x[5]    
+	I_ch          <- x[6]   
+	I_cicu        <- x[7]    
+	death         <- x[8]  
+	R             <- x[9]  
+	R_ct          <- x[10]
 	
 	# calculated state-variables
-	N_contact     <-x[11]  # N_contact = S + E + I_sc + I_c + R + R_ct. denominator for contact rate is everyone who is not in isolation. #R and R_ct contribute to herd immunity
-	N             <-x[12]   # N = <- S + E + I_sc + I_c + I_ct + I_ch + I_cicu + R + R_ct +death
-	CumIncid      <-x[13]
-	Cum_import    <-x[14]                 
-	Cum_ss        <-x[15]                
-	CumIncid_tot  <-x[16]
-	CumED_ct      <-x[17]
-	CumAdmit      <-x[18]
-	CumICU        <-x[19]  
-	Cumdx_ct      <-x[20]
-	Cumdx_admicu  <-x[21]
-	Cumdx_tot     <-x[22]
+	N_contact     <- x[11]  # N_contact = S + E + I_sc + I_c + R + R_ct. denominator for contact rate is everyone who is not in isolation. #R and R_ct contribute to herd immunity
+	N             <- x[12]   # N = <- S + E + I_sc + I_c + I_ct + I_ch + I_cicu + R + R_ct +death
+	CumIncid      <- x[13]
+	Cum_import    <- x[14]                 
+	Cum_ss        <- x[15]                
+	CumIncid_tot  <- x[16]
+	CumED_ct      <- x[17]
+	CumAdmit      <- x[18]
+	CumICU        <- x[19]  
+	Cumdx_ct      <- x[20]
+	Cumdx_admicu  <- x[21]
+	Cumdx_tot     <- x[22]
 	
-	with(as.list(parms),{
-		
+	with(as.list(parms), {
 		############# set up time-variant parameters#####################
 		
 		# contact rate reflected in beta changing over time, currently just a one-step change
-		if (t>=social_distancing){
-			beta <-beta*(1-drop_Reffective)
-			R0   <-R0*(1-drop_Reffective)  #note, we use R0 within the function to denote the reproductive rate after epidemic starts
+		if (t >= social_distancing){
+			beta <- beta * (1 - drop_Reffective)
+			R0   <- R0 * (1 - drop_Reffective)  #note, we use R0 within the function to denote the reproductive rate after epidemic starts
+		}
+
+		# the proportion who are detected/tested and self-isolate, or just self-isolate when symptomatic
+		if (t >= when_test_increase) {
+			prob_test <- prob_test_max
 		}
 		
 		# proportion/probablity of testing among non-hospitalized and among hospitalized if have COVID19, triggered by Ncases detected
-		if(Cumdx_tot>= Ncases_trigger ) {  
+		if (Cumdx_tot >= Ncases_trigger) {  
 			tau_1 <- tau_1_max
 			tau_2 <- tau_2_max
 		}
 		
 		# super-spreading events, which occur at a regular frequency for now, and which stop once reproductive rate drops to <1
 		
-		if(t%%event_ss_modulo <2 && (R0*(S/N_contact)>1)){
+		if (t %% event_ss_modulo < 2 && (R0 * (S / N_contact) > 1)) {
 			event_ss <- event_ss*1
-		}else {
-			event_ss <-0
+		} else {
+			event_ss <- 0
 		}
 		
 		############# external (or imported) cases ######################nb: imported cases immediately subtracted from S
-		imported <- interp(t)
+		# assumption = imported cases drop to zero as soon as epidemic peaks (i.e. Reffective <=1)
+		if ((R0 * (S / N_contact) > 1)) {
+			imported <- input(t)
+		} else {
+			imported <- 0
+		}
 		
 		#################################################################  
 		#coupled ODE ####################################################

@@ -1,5 +1,10 @@
 import::from('./vm.R', setupParams, runSimulation, generateModelPlot)
 
+# Validate input
+shiny::validate(
+	shiny::need(input$prob_test_max > input$prob_test, 'Increased case detection must be greater than proportion who get tested!')
+)
+
 # Server functionality
 params <- shiny::reactive({setupParams(input)})
 modelout <- shiny::reactive({runSimulation(input, params())})
