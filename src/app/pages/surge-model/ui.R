@@ -3,16 +3,21 @@ import::from(tidyr, '%>%')
 hospitalParamsPanel <- function () {
 	shiny::tabPanel('Hospital',
 		shiny::br(),
+		shiny::numericInput(
+			inputId = 'initpop',
+			label = 'total city population size',
+			value = 6196731
+		),
 		shiny::sliderInput(
 			inputId = 'catchment_ED',
-			label = 'catchment area for hospital re: ED visits',
+			label = 'catchment area for hospital emergency department visits (relative to population size)',
 			value = 0.1,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'catchment_hosp',
-			label = 'catchment area for hospital re: hospitalizations',
+			label = 'catchment area for hospitalizations (relative to population size)',
 			value = 0.1,
 			min = 0,
 			max = 1
@@ -39,7 +44,7 @@ hospitalParamsPanel <- function () {
 		),
 		shiny::numericInput(
 			inputId = 'baseline_EDvisits_perday',
-			label = 'median number of ED vists per day',
+			label = 'median number of emergency department vists per day',
 			value = 56
 		) 
 	)
@@ -50,35 +55,35 @@ epidemiologyParamsPanel <- function () {
 		shiny::br(),
 		shiny::numericInput(
 			inputId = 'dur_latent',
-			label = 'length of exposure (latent) period in days when infected but not infectious',
+			label = 'duration (in days) of exposure (latent) period when infected but not infectious',
 			value = 2.0
 		),
 		shiny::numericInput(
 			inputId = 'dur_incubation',
-			label = 'duration (days) of subclinical prior to onset of clinical symptoms which would lead',
+			label = 'duration (in days) of subclinical but infectious [if not isolated] period, prior to onset of clinical symptoms',
 			value = 5.2
 		),
 		shiny::numericInput(
 			inputId = 'dur_symptomatic',
-			label = 'duration (days) symptomatic and infectious [if not isolated] when not severe prior to recovery',
+			label = 'duration (in days) of symptomatic and infectious [if not isolated] period when not severe, prior to recovery',
 			value = 7.0
-		),
-		shiny::sliderInput(
-			inputId = 'prob_diagnosed',
-			label = 'proportion of symptomatic',
-			value = 0.55,
-			min = 0,
-			max = 1
 		),
 		shiny::numericInput(
 			inputId = 'dur_admitted',
-			label = 'duration (days) symptomatic and infectious [if not isolated] when hospitalized prior to recovery [and excluding those who died/ICU]',
+			label = 'duration (in days) of symptomatic and infectious [if not isolated] period when hospitalized, prior to recovery [excluding those who died or in ICU]',
 			value = 12
 		),
 		shiny::numericInput(
 			inputId = 'dur_icu',
-			label = 'duration (days) symptomatic and infectious [if not isolated] in ICU prior to recovery [excluding those who died]',
+			label = 'duration (in days) of symptomatic and infectious [if not isolated] period in ICU, prior to recovery [excluding those who died]',
 			value = 8
+		),
+		shiny::sliderInput(
+			inputId = 'prob_diagnosed',
+			label = 'proportion who are symptomatic',
+			value = 0.55,
+			min = 0,
+			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'prob_admit_diagnosed',
@@ -103,13 +108,8 @@ epidemiologyParamsPanel <- function () {
 		),
 		shiny::numericInput(
 			inputId = 'R0',
-			label = 'R0 and Reffective',
+			label = 'R0',
 			value = 2.4
-		),
-		shiny::numericInput(
-			inputId = 'initpop',
-			label = 'total population size',
-			value = 6196731
 		),
 		shiny::numericInput(
 			inputId = 'seed_backCalc',
@@ -124,14 +124,14 @@ interventionParamsPanel <- function () {
 		shiny::br(),
 		shiny::sliderInput(
 			inputId = 'prob_test',
-			label = 'proportion of non-severe, symptomatic who get tested/detected or self-isolate without testing',
+			label = 'proportion of non-severe, symptomatic cases who get tested or self-isolate without testing',
 			value = 0.1,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'prob_test_max',
-			label = 'proportion of testing under increased case detection',
+			label = 'under increased case detection, proportion of non-severe, symptomatic cases who get tested or self-isolate without testing',
 			value = 0.2,
 			min = 0,
 			max = 1
@@ -145,7 +145,7 @@ interventionParamsPanel <- function () {
 		),
 		shiny::sliderInput(
 			inputId = 'prop_travel_test',
-			label = 'proportion of non-severe, symptomatic imported cases who will get tested/detected or self-isolate without testing',
+			label = 'proportion of non-severe, symptomatic imported cases who will get tested or self-isolate without testing',
 			value = 0.5,
 			min = 0,
 			max = 1
