@@ -124,62 +124,60 @@ runSimulation <- function (input, paramMat) {
 	modelout$I_cicu_hosp           <- modelout$I_cicu        * input$catchment_hosp
 
 	output_cityhosp <- tibble::tibble(
-		time = modelout$time,
-		DailyTrueIncid = modelout$DailyTrueIncid,
-		DailyDetCases = modelout$DailyDetCases,
-		DailyED_total = modelout$DailyED_total,
-		I_ch = modelout$I_ch,
-		I_cicu = modelout$I_cicu,
-		DailyED_total_hosp = modelout$DailyED_total_hosp,
-		I_ch_hosp = modelout$I_ch_hosp,
-		I_cicu_hosp = modelout$I_cicu_hosp,
-		inpatient_bed_max = paramMat$inpatient_bed_max,
-		ICU_bed_max = paramMat$ICU_bed_max,
-		baseline_inpt_perday = paramMat$baseline_inpt_perday,
-		baseline_ICUpt_perday = paramMat$baseline_ICUpt_perday
+		'time (in days)' = modelout$time,
+		'daily true incidence' = modelout$DailyTrueIncid,
+		'daily detected cases' = modelout$DailyDetCases,
+		'daily ED visits, city-level' = modelout$DailyED_total,
+		'number of non-ICU inpatients, city-level' = modelout$I_ch,
+		'number of ICU patients, city-level' = modelout$I_cicu,
+		'daily ED visits, hospital' = modelout$DailyED_total_hosp,
+		'number of non-ICU inpatients, hospital' = modelout$I_ch_hosp,
+		'number of ICU patients, hospital' = modelout$I_cicu_hosp,
+		'non-ICU inpatient bed capacity' = paramMat$inpatient_bed_max,
+		'ICU patient bed capacity' = paramMat$ICU_bed_max
 	)
 
 	output_cityhosp
 }
 
 generateModelPlot <- function (modelout) {
-	fig <- plotly::plot_ly(modelout, x=~time)
+	fig <- plotly::plot_ly(modelout, x=~`time (in days)`)
 	fig <- fig %>% plotly::add_trace(
-		y=~DailyED_total_hosp, 
-		name='Daily ED Total (catchment)',
+		y=~`daily ED visits, hospital`, 
+		name='daily ED visits, hospital',
 		mode='lines', 
 		type='scatter'
 	)
 	fig <- fig %>% plotly::add_trace(
-		y=~I_ch_hosp, 
-		name='Isolated in hospital (catchment)',
+		y=~`number of non-ICU inpatients, hospital`, 
+		name='number of non-ICU inpatients, hospital', 
 		mode='lines', 
 		type='scatter'
 	)
 	fig <- fig %>% plotly::add_trace(
-		y=~I_cicu_hosp, 
-		name='Isolated in ICU (catchment)',
+		y=~`number of ICU patients, hospital`, 
+		name='number of ICU patients, hospital',
 		mode='lines', 
 		type='scatter'
 	)
 
 	fig <- fig %>% plotly::add_trace(
-		y=~inpatient_bed_max, 
-		name='Inpatient bed capacity',
+		y=~`non-ICU inpatient bed capacity`, 
+		name='non-ICU inpatient bed capacity',
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
 	)
 	fig <- fig %>% plotly::add_trace(
-		y=~ICU_bed_max, 
-		name='ICU bed capacity',
+		y=~`ICU patient bed capacity`, 
+		name='ICU patient bed capacity',
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
 	)
 
 	fig <- fig %>% plotly::layout(
-		xaxis=list(title='Time (days)'),
+		xaxis=list(title='Time (in days)'),
 		yaxis=list(title='Number of cases', hoverformat='.0f')
 	)
 
