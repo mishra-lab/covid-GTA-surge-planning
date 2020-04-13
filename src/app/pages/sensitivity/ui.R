@@ -8,16 +8,22 @@ sensitivityUI <- function () {
 			shiny::sidebarPanel(
 				shiny::h3('Model Parameters', style='margin-top: 0;'),
 				br(),
+				shiny::numericInput(
+					inputId='popsize',
+					label=INPUT_PARAM_DESCRIPTIONS[['initpop']],
+					value=6196731,
+					
+				),
 				shiny::sliderInput(
-					'catchmentProp',
-					'catchment area for hospital',
+					inputId='catchmentProp',
+					label=INPUT_PARAM_DESCRIPTIONS[['catchment_hosp']],
 					value=0.1,
 					min=0,
 					max=1
 				),
 				shiny::selectInput(
-					'parameterSelect',
-					'parameter for plotting sensitivity analysis',
+					inputId='parameterSelect',
+					label='parameter for plotting sensitivity analysis',
 					c(
 						INPUT_PARAM_DESCRIPTIONS[['seed_prop']],
 						INPUT_PARAM_DESCRIPTIONS[['prob_admit']],
