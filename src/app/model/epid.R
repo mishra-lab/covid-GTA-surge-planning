@@ -1,35 +1,44 @@
 # COVID model
-# Updated March 15, 2020
 # epid function, which sets the initial conditions [based on parmlist] and calls the solver to run the model
 
 import::from('./covid_model_det.R', covid_model_det)
+
+###################################################################################################
+# the epid function has one argument = the parameter list which can be one
+# set of paramters, or a matrix or data.frame of parameters
+# the parameters include initial conditions like seeding
+# the epid function therefore sets up the initial conditions and runs the ODE model
+# the output is returned as a data frame with column headings for the state variables
+# from the covid_model_det function (state variables, as well as any other outputs like
+# cummulative incidence)
+# the output also includes the parameter values for each simulation
 ###################################################################################################
 epid <-function(parmlist)
 {
 	#list the inital values for each state-variable and each ODE model output (e.g. Cummulative Incidence, etc.)
 	xstart_fxn <- c(
-		S  			= parmlist$initpop - parmlist$seed_backCalc, #seed_fxn), #susceptible, initpop - seeds
-		E  			= 0,                        #latent, exposed and infected, not infectious
-		I_sc 		=0.5*(parmlist$seed_backCalc),              #infectious, subclinical      
-		I_c  		=0.5*(parmlist$seed_backCalc),              #infectious, symptomatic, not in isolation
-		I_ct 		=0,                       #infected, detected, in isolation at home
-		I_ch 		=0,                       #infected, detected, in isolation in hospital
-		I_cicu 		=0,                     #infected, detected, in isolation in ICU
-		death 		= 0,                     #track number of deaths
-		R     		= 0,                     #recovered, never detected
-		R_ct  		= 0,                     #recovered after isolation or hospitalization and now at home
+		S  			= parmlist$initpop - parmlist$seed_backCalc, 	#seed_fxn), #susceptible, initpop - seeds
+		E  			= 0,                        					#latent, exposed and infected, not infectious
+		I_sc 		= 0.5 * (parmlist$seed_backCalc),              	#infectious, subclinical      
+		I_c  		= 0.5 * (parmlist$seed_backCalc),              	#infectious, symptomatic, not in isolation
+		I_ct 		= 0,                       						#infected, detected, in isolation at home
+		I_ch 		= 0,                       						#infected, detected, in isolation in hospital
+		I_cicu 		= 0,                     						#infected, detected, in isolation in ICU
+		death 		= 0,                     						#track number of deaths
+		R     		= 0,                     						#recovered, never detected
+		R_ct  		= 0,                     						#recovered after isolation or hospitalization and now at home
 		N_contact 	= parmlist$initpop,
 		N 			= parmlist$initpop,
-		CumIncid	=0,                    #cumulative incidence of infection, excluding imported cases and superspreading events
-		Cum_import 	=0,                 #cumulative incidence imported cases 
-		Cum_ss 		=0,                     #cumulative incidence super spreading events
-		CumIncid_tot=0,                #total cumulative incidence
-		CumED_ct	=0,                      #cumulative incidence of ED visit
-		CumAdmit	=0,                    #cumulative incidence of admission to hospital
-		CumICU		=0,                      #cumulative incidence of admission to ICU
-		Cumdx_ct	=0,                    #cumulative incidence of diagnoses among those in I_ct (home isolation or diagnosed but not admitted)
-		Cumdx_admicu=0,                #cumulative incidence of diagnoses among those admitted or in ICU before death or discharge
-		Cumdx_tot 	=0                   #cumulative incidence of diagnoses among those not-admitted and among those admitted or in ICU before death or discharge
+		CumIncid	= 0,                    						#cumulative incidence of infection, excluding imported cases and superspreading events
+		Cum_import 	= 0,                 							#cumulative incidence imported cases 
+		Cum_ss 		= 0,                     						#cumulative incidence super spreading events
+		CumIncid_tot= 0,                							#total cumulative incidence
+		CumED_ct	= 0,                      						#cumulative incidence of ED visit
+		CumAdmit	= 0,                    						#cumulative incidence of admission to hospital
+		CumICU		= 0,                      						#cumulative incidence of admission to ICU
+		Cumdx_ct	= 0,                    						#cumulative incidence of diagnoses among those in I_ct (home isolation or diagnosed but not admitted)
+		Cumdx_admicu= 0,                							#cumulative incidence of diagnoses among those admitted or in ICU before death or discharge
+		Cumdx_tot 	= 0                   							#cumulative incidence of diagnoses among those not-admitted and among those admitted or in ICU before death or discharge
 		
 	)  
 
