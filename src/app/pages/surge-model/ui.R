@@ -1,3 +1,5 @@
+import::from('../../utils.R', INPUT_PARAM_DESCRIPTIONS)
+
 import::from(tidyr, '%>%')
 
 hospitalParamsPanel <- function () {
@@ -5,46 +7,46 @@ hospitalParamsPanel <- function () {
 		shiny::br(),
 		shiny::numericInput(
 			inputId = 'initpop',
-			label = 'total city population size',
+			label = INPUT_PARAM_DESCRIPTIONS[['initpop']],
 			value = 6196731
 		),
 		shiny::sliderInput(
 			inputId = 'catchment_ED',
-			label = 'catchment area for hospital emergency department visits (relative to population size)',
+			label = INPUT_PARAM_DESCRIPTIONS[['catchment_ED']],
 			value = 0.1,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'catchment_hosp',
-			label = 'catchment area for hospitalizations (relative to population size)',
+			label = INPUT_PARAM_DESCRIPTIONS[['catchment_hosp']],
 			value = 0.1,
 			min = 0,
 			max = 1
 		),
 		shiny::numericInput(
 			inputId = 'inpatient_bed_max',
-			label = 'maximum inpatient bed capacity',
+			label = INPUT_PARAM_DESCRIPTIONS[['inpatient_bed_max']],
 			value = 450
 		),
 		shiny::numericInput(
 			inputId = 'ICU_bed_max',
-			label = 'maximum ICU bed capacity',
+			label = INPUT_PARAM_DESCRIPTIONS[['ICU_bed_max']],
 			value = 30
 		),
 		shiny::numericInput(
 			inputId = 'baseline_inpt_perday',
-			label = 'median number of occupied hospital (non-ICU) beds per day',
+			label = INPUT_PARAM_DESCRIPTIONS[['baseline_inpt_perday']],
 			value = 400
 		),
 		shiny::numericInput(
 			inputId = 'baseline_ICUpt_perday',
-			label = 'median number of occupied hospital ICU beds per day',
+			label = INPUT_PARAM_DESCRIPTIONS[['baseline_ICUpt_perday']],
 			value = 26
 		),
 		shiny::numericInput(
 			inputId = 'baseline_EDvisits_perday',
-			label = 'median number of emergency department vists per day',
+			label = INPUT_PARAM_DESCRIPTIONS[['baseline_EDvisits_perday']],
 			value = 56
 		) 
 	)
@@ -55,65 +57,65 @@ epidemiologyParamsPanel <- function () {
 		shiny::br(),
 		shiny::numericInput(
 			inputId = 'dur_latent',
-			label = 'duration (in days) of exposure (latent) period when infected but not infectious',
+			label = INPUT_PARAM_DESCRIPTIONS[['dur_latent']],
 			value = 2.0
 		),
 		shiny::numericInput(
 			inputId = 'dur_incubation',
-			label = 'duration (in days) of subclinical but infectious [if not isolated] period, prior to onset of clinical symptoms',
+			label = INPUT_PARAM_DESCRIPTIONS[['dur_incubation']],
 			value = 5.2
 		),
 		shiny::numericInput(
 			inputId = 'dur_symptomatic',
-			label = 'duration (in days) of symptomatic and infectious [if not isolated] period when not severe, prior to recovery',
+			label = INPUT_PARAM_DESCRIPTIONS[['dur_symptomatic']],
 			value = 7.0
 		),
 		shiny::numericInput(
 			inputId = 'dur_admitted',
-			label = 'duration (in days) of symptomatic and infectious [if not isolated] period when hospitalized, prior to recovery [excluding those who died or in ICU]',
+			label = INPUT_PARAM_DESCRIPTIONS[['dur_admitted']],
 			value = 12
 		),
 		shiny::numericInput(
 			inputId = 'dur_icu',
-			label = 'duration (in days) of symptomatic and infectious [if not isolated] period in ICU, prior to recovery [excluding those who died]',
+			label = INPUT_PARAM_DESCRIPTIONS[['dur_icu']],
 			value = 8
 		),
 		shiny::sliderInput(
 			inputId = 'prob_diagnosed',
-			label = 'proportion who are symptomatic',
+			label = INPUT_PARAM_DESCRIPTIONS[['prob_diagnosed']],
 			value = 0.55,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'prob_admit_diagnosed',
-			label = 'proportion who are admitted to hospital among those infected',
+			label = INPUT_PARAM_DESCRIPTIONS[['prob_admit_diagnosed']],
 			value = 0.1,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'condprob_icu',
-			label = 'proportion who go to ICU if admitted to hospital',
+			label = INPUT_PARAM_DESCRIPTIONS[['condprob_icu']],
 			value = 0.08,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'condprob_cfr',
-			label = 'proportion who die from COVID-19 if admitted to ICU',
+			label = INPUT_PARAM_DESCRIPTIONS[['condprob_cfr']],
 			value = 0.4,
 			min = 0,
 			max = 1
 		),
 		shiny::numericInput(
 			inputId = 'R0',
-			label = 'R0',
+			label = INPUT_PARAM_DESCRIPTIONS[['R0']],
 			value = 2.4
 		),
 		shiny::numericInput(
 			inputId = 'seed_backCalc',
-			label = 'size of epidemic / community transmission prior to detection (seeding)',
+			label = INPUT_PARAM_DESCRIPTIONS[['seed_backCalc']],
 			value = 100
 		),
 	)
@@ -124,52 +126,52 @@ interventionParamsPanel <- function () {
 		shiny::br(),
 		shiny::sliderInput(
 			inputId = 'prob_test',
-			label = 'proportion of non-severe, symptomatic cases who get tested or self-isolate without testing',
+			label = INPUT_PARAM_DESCRIPTIONS[['prob_test']],
 			value = 0.1,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'prob_test_max',
-			label = 'under increased case detection, proportion of non-severe, symptomatic cases who get tested or self-isolate without testing',
+			label = INPUT_PARAM_DESCRIPTIONS[['prob_test_max']],
 			value = 0.2,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'when_test_increase',
-			label = 'on which day after the outbreak starts does case detection increase?',
+			label = INPUT_PARAM_DESCRIPTIONS[['when_test_increase']],
 			value = 40,
 			min = 1,
 			max = 300
 		),
 		shiny::sliderInput(
 			inputId = 'prop_travel_test',
-			label = 'proportion of non-severe, symptomatic imported cases who will get tested or self-isolate without testing',
+			label = INPUT_PARAM_DESCRIPTIONS[['prop_travel_test']],
 			value = 0.5,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'drop_Reffective',
-			label = 'by how much does social distancing reduce contact rates?',
+			label = INPUT_PARAM_DESCRIPTIONS[['drop_Reffective']],
 			value = 0.2,
 			min = 0,
 			max = 1
 		),
 		shiny::numericInput(
 			inputId = 'social_distancing',
-			label = 'on which day after the outbreak starts does social distancing begin?',
+			label = INPUT_PARAM_DESCRIPTIONS[['social_distancing']],
 			value = 20
 		),
 		shiny::numericInput(
 			inputId = 'event_ss',
-			label = 'number of super-spreading events',
+			label = INPUT_PARAM_DESCRIPTIONS[['event_ss']],
 			value = 5
 		),
 		shiny::numericInput(
 			inputId = 'event_ss_modulo',
-			label = 'number of days between super-spreading events',
+			label = INPUT_PARAM_DESCRIPTIONS[['event_ss_modulo']],
 			value = 11
 		),
 	)
