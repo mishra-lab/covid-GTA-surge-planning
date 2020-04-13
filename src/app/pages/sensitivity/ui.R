@@ -1,3 +1,5 @@
+import::from('../../utils.R', INPUT_PARAM_DESCRIPTIONS)
+
 import::from(tidyr, '%>%')
 
 sensitivityUI <- function () {
@@ -17,13 +19,13 @@ sensitivityUI <- function () {
 					'parameterSelect',
 					'parameter for plotting sensitivity analysis',
 					c(
-						'seed_prop',
-						'prob_admit',
-						'drop_Reffective',
-						'dur_admitted',
-						'social_distancing',
-						'prob_test_max',
-						'R0'
+						INPUT_PARAM_DESCRIPTIONS[['seed_prop']],
+						INPUT_PARAM_DESCRIPTIONS[['prob_admit']],
+						INPUT_PARAM_DESCRIPTIONS[['drop_Reffective']],
+						INPUT_PARAM_DESCRIPTIONS[['dur_admitted']],
+						INPUT_PARAM_DESCRIPTIONS[['social_distancing']],
+						INPUT_PARAM_DESCRIPTIONS[['prob_test_max']],
+						INPUT_PARAM_DESCRIPTIONS[['R0']]
 					)
 				)
 			),

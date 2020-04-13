@@ -4,6 +4,7 @@
 #################################################
 
 import::from('./model/epid.R', epid)
+import::from('./utils.R', INPUT_PARAM_DESCRIPTIONS)
 
 ###FIXED############################################################################################
 # number of days, eg. 300 days. fix interval = 1
@@ -189,9 +190,7 @@ readDefault <- function () {
 	default
 }
 
-readSensitivity <- function (input, default) {
-	selectedParameter <- input$parameterSelect
-
+readSensitivity <- function (selectedParameter, default) {
 	# Figure out which column to import based on selectedParameter
 	header <- read.csv('./data/oneway_sensitivity.csv.gz', nrows=1, header=FALSE)
 	selectedIdx <- which(header == selectedParameter)[[1]]
@@ -213,8 +212,7 @@ readSensitivity <- function (input, default) {
 	data
 }
 
-generateSensitivityPlot <- function (input, data) {
-	selectedParameter <- input$parameterSelect
+generateSensitivityPlot <- function (input, selectedParameter, data) {
 	paramRange <- input$parameterRange
 
 	if (!is.null(paramRange)) {
@@ -233,7 +231,7 @@ generateSensitivityPlot <- function (input, data) {
 			showlegend=FALSE
 		) %>%
 		plotly::colorbar(
-			title=selectedParameter
+			title=''
 		) %>%
 		plotly::layout(
 			xaxis=list(title='Days since outbreak started\n(local transmission)'),
