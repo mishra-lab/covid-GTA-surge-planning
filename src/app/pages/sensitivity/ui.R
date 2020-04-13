@@ -1,3 +1,5 @@
+import::from('../../utils.R', INPUT_PARAM_DESCRIPTIONS)
+
 import::from(tidyr, '%>%')
 
 sensitivityUI <- function () {
@@ -6,24 +8,30 @@ sensitivityUI <- function () {
 			shiny::sidebarPanel(
 				shiny::h3('Model Parameters', style='margin-top: 0;'),
 				br(),
+				shiny::numericInput(
+					inputId='popsize',
+					label=INPUT_PARAM_DESCRIPTIONS[['initpop']],
+					value=6196731,
+					
+				),
 				shiny::sliderInput(
-					'catchmentProp',
-					'catchment area for hospital',
+					inputId='catchmentProp',
+					label=INPUT_PARAM_DESCRIPTIONS[['catchment_hosp']],
 					value=0.1,
 					min=0,
 					max=1
 				),
 				shiny::selectInput(
-					'parameterSelect',
-					'parameter for plotting sensitivity analysis',
+					inputId='parameterSelect',
+					label='parameter for plotting sensitivity analysis',
 					c(
-						'seed_prop',
-						'prob_admit',
-						'drop_Reffective',
-						'dur_admitted',
-						'social_distancing',
-						'prob_test_max',
-						'R0'
+						INPUT_PARAM_DESCRIPTIONS[['seed_prop']],
+						INPUT_PARAM_DESCRIPTIONS[['prob_admit']],
+						INPUT_PARAM_DESCRIPTIONS[['drop_Reffective']],
+						INPUT_PARAM_DESCRIPTIONS[['dur_admitted']],
+						INPUT_PARAM_DESCRIPTIONS[['social_distancing']],
+						INPUT_PARAM_DESCRIPTIONS[['prob_test_max']],
+						INPUT_PARAM_DESCRIPTIONS[['R0']]
 					)
 				)
 			),
