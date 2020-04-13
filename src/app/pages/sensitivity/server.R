@@ -1,5 +1,7 @@
 import::from('./vm.R', readDefault, readSensitivity, generateSensitivityPlot)
 
+shinyjs::disable('popsize')
+
 default <- shiny::reactive({readDefault()})
 selectedParameter <- shiny::reactive({
 	names(INPUT_PARAM_DESCRIPTIONS)[INPUT_PARAM_DESCRIPTIONS == input$parameterSelect]
