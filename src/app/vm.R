@@ -4,7 +4,7 @@
 #################################################
 
 import::from('./model/epid.R', epid)
-import::from('./utils.R', INPUT_PARAM_DESCRIPTIONS, OUTPUT_COLUMN_DESCRIPTIONS)
+import::from('./utils.R', INPUT_PARAM_DESCRIPTIONS, OUTPUT_COLUMN_DESCRIPTIONS, PLOT_OUTPUT_DESCRIPTIONS)
 
 ###FIXED############################################################################################
 # number of days, eg. 300 days. fix interval = 1
@@ -145,32 +145,32 @@ generateModelPlot <- function (modelOut) {
 	fig <- plotly::plot_ly(modelOut, x=~time)
 	fig <- fig %>% plotly::add_trace(
 		y=~DailyED_total_hosp,
-		name=OUTPUT_COLUMN_DESCRIPTIONS[['DailyED_total_hosp']],
+		name=PLOT_OUTPUT_DESCRIPTIONS[['DailyED_total_hosp']],
 		mode='lines', 
 		type='scatter'
 	)
 	fig <- fig %>% plotly::add_trace(
 		y=~I_ch_hosp,
-		name=OUTPUT_COLUMN_DESCRIPTIONS[['I_ch_hosp']], 
+		name=PLOT_OUTPUT_DESCRIPTIONS[['I_ch_hosp']], 
 		mode='lines', 
 		type='scatter'
 	)
 	fig <- fig %>% plotly::add_trace(
 		y=~I_cicu_hosp,
-		name=OUTPUT_COLUMN_DESCRIPTIONS[['I_cicu_hosp']],
+		name=PLOT_OUTPUT_DESCRIPTIONS[['I_cicu_hosp']],
 		mode='lines', 
 		type='scatter'
 	)
 	fig <- fig %>% plotly::add_trace(
 		y=~inpatient_bed_max,
-		name=OUTPUT_COLUMN_DESCRIPTIONS[['inpatient_bed_max']],
+		name=PLOT_OUTPUT_DESCRIPTIONS[['inpatient_bed_max']],
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
 	)
 	fig <- fig %>% plotly::add_trace(
 		y=~ICU_bed_max,
-		name=OUTPUT_COLUMN_DESCRIPTIONS[['ICU_bed_max']],
+		name=PLOT_OUTPUT_DESCRIPTIONS[['ICU_bed_max']],
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
@@ -178,13 +178,15 @@ generateModelPlot <- function (modelOut) {
 	# TODO: try to figure out optimal position of legend, based on
 	# functions peaks?
 	fig <- fig %>% plotly::layout(
-		xaxis=list(title=OUTPUT_COLUMN_DESCRIPTIONS[['time']]),
+		xaxis=list(title=PLOT_OUTPUT_DESCRIPTIONS[['time']]),
 		yaxis=list(title='Counts', hoverformat='.0f'),
 		legend=list(
 			orientation='v',
 			x=0.7,
 			y=0.9
-		)
+		),
+		title='Healthcare surge in hospital catchment area',
+		margin=list(t=45, b=45)
 	)
 
 	fig

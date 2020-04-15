@@ -51,6 +51,15 @@ INPUT_PARAM_DESCRIPTIONS <- list(
 	sens_ICU_bed_max = 'maximum ICU bed capacity'
 )
 
+PLOT_OUTPUT_DESCRIPTIONS <- list(
+	time = 'Days since outbreak started',
+	DailyED_total_hosp = 'Daily number of new ED visits',
+	I_ch_hosp = 'Prevalent number of non-ICU inpatients',
+	I_cicu_hosp = 'Prevalent number of ICU patients',
+	inpatient_bed_max = 'Non-ICU inpatient bed capacity',
+	ICU_bed_max = 'ICU patient bed capacity'
+)
+
 OUTPUT_COLUMN_DESCRIPTIONS <- list(
 	time = 'Days since outbreak started',
 	DailyTrueIncid = 'Daily true incidence',
