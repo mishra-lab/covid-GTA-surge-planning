@@ -11,6 +11,7 @@ swap_kv <- function(l) {
 ###### Constants
 
 INPUT_PARAM_DESCRIPTIONS <- list(
+	########### Model tab inputs
 	###### Hospital-specific
 	initpop = 'total city population size',
 	catchment_ED = 'catchment area for hospital emergency department visits (relative to population size)',
@@ -42,7 +43,10 @@ INPUT_PARAM_DESCRIPTIONS <- list(
 	event_ss = 'number of super-spreading events',
 	event_ss_modulo = 'number of days between super-spreading events',
 	###### Misc
-	seed_prop = 'proportion of population with active infection at the start of the outbreak'
+	seed_prop = 'proportion of population with active infection at the start of the outbreak',
+	########### Sensitivity tab inputs
+	sens_catchment_ICU = 'catchment area for ICU patients (relative to population size)',
+	sens_catchment_hosp = 'catchment area for hospitalizations (relative to population size)'
 )
 
 OUTPUT_COLUMN_DESCRIPTIONS <- list(

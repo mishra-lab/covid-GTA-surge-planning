@@ -204,12 +204,14 @@ readSensitivity <- function (selectedParameter, default) {
 	# Figure out which column to import based on selectedParameter
 	header <- read.csv('./data/oneway_sensitivity.csv.gz', nrows=1, header=FALSE)
 	selectedIdx <- which(header == selectedParameter)[[1]]
-	outcomeIdx <- which(header == 'I_ch')[[1]]
+	chIdx <- which(header == 'I_ch')[[1]]
+	cicuIdx <- which(header == 'I_cicu')[[1]]
 	timeIdx <- which(header == 'time')[[1]]
 	colClasses <- rep('NULL', length(header))
 
 	colClasses[[selectedIdx]] <- NA
-	colClasses[[outcomeIdx]] <- NA
+	colClasses[[chIdx]] <- NA
+	colClasses[[cicuIdx]] <- NA
 	colClasses[[timeIdx]] <- NA
 
 	# Read data, importing only necessary columns
@@ -222,17 +224,17 @@ readSensitivity <- function (selectedParameter, default) {
 	data
 }
 
-generateSensitivityPlot <- function (input, selectedParameter, data) {
+generateHospSensitivityPlot <- function (input, selectedParameter, data) {
 	paramRange <- input$parameterRange
 
 	if (!is.null(paramRange)) {
 		data <- data %>% dplyr::filter(dplyr::between(data[[selectedParameter]], paramRange[[1]], paramRange[[2]]))
 	}
 
-	fig <- data %>%
+	figHosp <- data %>%
 		plotly::plot_ly(
 			x=~time, 
-			y=~I_ch * input$catchmentProp, 
+			y=~I_ch * input$sens_catchment_hosp, 
 			type='scatter',
 			color=~data[[selectedParameter]],
 			split=~data[[selectedParameter]],
@@ -245,6 +247,37 @@ generateSensitivityPlot <- function (input, selectedParameter, data) {
 		) %>%
 		plotly::layout(
 			xaxis=list(title='Days since outbreak started\n(local transmission)'),
-			yaxis=list(title='Number of COVID-19 cases in catchment area', hoverformat='.0f')
+			yaxis=list(title='Number of non-ICU inpatients with COVID-19 in catchment area', hoverformat='.0f')
 		)
+
+	figHosp
+}
+
+generateICUSensitivityPlot <- function (input, selectedParameter, data) {
+	paramRange <- input$parameterRange
+
+	if (!is.null(paramRange)) {
+		data <- data %>% dplyr::filter(dplyr::between(data[[selectedParameter]], paramRange[[1]], paramRange[[2]]))
+	}
+
+	figICU <- data %>%
+		plotly::plot_ly(
+			x=~time, 
+			y=~I_cicu * input$sens_catchment_ICU, 
+			type='scatter',
+			color=~data[[selectedParameter]],
+			split=~data[[selectedParameter]],
+			colors=c('yellow', 'red'), 
+			mode='lines',
+			showlegend=FALSE
+		) %>%
+		plotly::colorbar(
+			title=''
+		) %>%
+		plotly::layout(
+			xaxis=list(title='Days since outbreak started\n(local transmission)'),
+			yaxis=list(title='Number of ICU inpatients with COVID-19 in catchment area', hoverformat='.0f')
+		)
+
+	figICU
 }
