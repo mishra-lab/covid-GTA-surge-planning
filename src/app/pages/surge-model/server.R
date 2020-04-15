@@ -11,6 +11,10 @@ inputParams <- shiny::reactive({
 		shiny::need(
 			input$prob_test_max >= input$prob_test, 
 			'Proportion of testing under increased case detection must be greater than or equal to regular proportion of testing!'
+		),
+		shiny::need(
+			input$dur_incubation > input$dur_latent,
+			'Duration of incubation period must be greater than duration of latent period!'
 		)
 	)
 	setupParams(input)

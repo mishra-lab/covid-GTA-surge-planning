@@ -179,13 +179,15 @@ generateModelPlot <- function (modelOut) {
 		type='scatter', 
 		line=list(dash='dash')
 	)
+	# TODO: try to figure out optimal position of legend, based on
+	# functions peaks?
 	fig <- fig %>% plotly::layout(
 		xaxis=list(title=OUTPUT_COLUMN_DESCRIPTIONS[['time']]),
 		yaxis=list(title='Counts', hoverformat='.0f'),
 		legend=list(
-			orientation='h',
-			# x=100,
-			y=-1
+			orientation='v',
+			x=0.7,
+			y=0.9
 		)
 	)
 
