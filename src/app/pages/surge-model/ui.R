@@ -97,14 +97,14 @@ epidemiologyParamsPanel <- function () {
 		shiny::sliderInput(
 			inputId = 'condprob_icu',
 			label = INPUT_PARAM_DESCRIPTIONS[['condprob_icu']],
-			value = 0.08,
+			value = 0.33,
 			min = 0,
 			max = 1
 		),
 		shiny::sliderInput(
 			inputId = 'condprob_cfr',
 			label = INPUT_PARAM_DESCRIPTIONS[['condprob_cfr']],
-			value = 0.4,
+			value = 0.38,
 			min = 0,
 			max = 1
 		),
@@ -116,7 +116,7 @@ epidemiologyParamsPanel <- function () {
 		shiny::numericInput(
 			inputId = 'seed_backCalc',
 			label = INPUT_PARAM_DESCRIPTIONS[['seed_backCalc']],
-			value = 100
+			value = 200
 		),
 	)
 }
@@ -134,7 +134,7 @@ interventionParamsPanel <- function () {
 		shiny::sliderInput(
 			inputId = 'prob_test_max',
 			label = INPUT_PARAM_DESCRIPTIONS[['prob_test_max']],
-			value = 0.2,
+			value = 0.1,
 			min = 0,
 			max = 1
 		),
@@ -148,7 +148,7 @@ interventionParamsPanel <- function () {
 		shiny::sliderInput(
 			inputId = 'prop_travel_test',
 			label = INPUT_PARAM_DESCRIPTIONS[['prop_travel_test']],
-			value = 0.5,
+			value = 0.2,
 			min = 0,
 			max = 1
 		),
@@ -162,7 +162,7 @@ interventionParamsPanel <- function () {
 		shiny::numericInput(
 			inputId = 'social_distancing',
 			label = INPUT_PARAM_DESCRIPTIONS[['social_distancing']],
-			value = 20
+			value = 30
 		),
 		shiny::numericInput(
 			inputId = 'event_ss',
