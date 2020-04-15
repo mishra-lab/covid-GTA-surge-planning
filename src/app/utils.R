@@ -46,7 +46,9 @@ INPUT_PARAM_DESCRIPTIONS <- list(
 	seed_prop = 'proportion of population with active infection at the start of the outbreak',
 	########### Sensitivity tab inputs
 	sens_catchment_ICU = 'catchment area for ICU patients (relative to population size)',
-	sens_catchment_hosp = 'catchment area for hospitalizations (relative to population size)'
+	sens_catchment_hosp = 'catchment area for hospitalizations (relative to population size)',
+	sens_inpatient_bed_max = 'maximum inpatient bed capacity',
+	sens_ICU_bed_max = 'maximum ICU bed capacity'
 )
 
 OUTPUT_COLUMN_DESCRIPTIONS <- list(

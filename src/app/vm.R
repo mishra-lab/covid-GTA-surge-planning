@@ -86,10 +86,6 @@ setupParams <- function (input) {
 		Ncases_trigger,           # number of detected cases that triggers the rise in testing
 		event_ss = input$event_ss,                 # number of super-spreading events
 		event_ss_modulo = input$event_ss_modulo	        # frequency of super-spreading events
-		# inpatient_bed_max = input$inpatient_bed_max,
-		# ICU_bed_max = input$ICU_bed_max,
-		# baseline_inpt_perday = input$baseline_inpt_perday,
-		# baseline_ICUpt_perday = input$baseline_ICUpt_perday
 	)
 
 	paramMat
@@ -242,12 +238,28 @@ generateHospSensitivityPlot <- function (input, selectedParameter, data) {
 			mode='lines',
 			showlegend=FALSE
 		) %>%
+		plotly::add_trace(
+			y=~input$sens_inpatient_bed_max,
+			name=INPUT_PARAM_DESCRIPTIONS[['sens_inpatient_bed_max']],
+			mode='lines',
+			type='scatter',
+			line=list(dash='dash', color='black')
+		) %>%
 		plotly::colorbar(
 			title=''
 		) %>%
 		plotly::layout(
 			xaxis=list(title='Days since outbreak started\n(local transmission)'),
-			yaxis=list(title='Number of non-ICU inpatients with COVID-19 in catchment area', hoverformat='.0f')
+			yaxis=list(title='Number of non-ICU inpatients with COVID-19<br>in catchment area', hoverformat='.0f'),
+			annotations=list(
+				x=50,
+				y=~input$sens_inpatient_bed_max,
+				text=INPUT_PARAM_DESCRIPTIONS[['sens_inpatient_bed_max']],
+				xref='x',
+				yref='y',
+				showarrow=FALSE,
+				yanchor='bottom'
+			)
 		)
 
 	figHosp
@@ -271,12 +283,28 @@ generateICUSensitivityPlot <- function (input, selectedParameter, data) {
 			mode='lines',
 			showlegend=FALSE
 		) %>%
+		plotly::add_trace(
+			y=~input$sens_ICU_bed_max,
+			name=INPUT_PARAM_DESCRIPTIONS[['sens_ICU_bed_max']],
+			mode='lines',
+			type='scatter',
+			line=list(dash='dash', color='black')
+		) %>%
 		plotly::colorbar(
 			title=''
 		) %>%
 		plotly::layout(
 			xaxis=list(title='Days since outbreak started\n(local transmission)'),
-			yaxis=list(title='Number of ICU inpatients with COVID-19 in catchment area', hoverformat='.0f')
+			yaxis=list(title='Number of ICU inpatients with COVID-19<br>in catchment area', hoverformat='.0f'),
+			annotations=list(
+				x=50,
+				y=~input$sens_ICU_bed_max,
+				text=INPUT_PARAM_DESCRIPTIONS[['sens_ICU_bed_max']],
+				xref='x',
+				yref='y',
+				showarrow=FALSE,
+				yanchor='bottom'
+			)
 		)
 
 	figICU

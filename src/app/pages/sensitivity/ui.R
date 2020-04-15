@@ -28,6 +28,16 @@ sensitivityUI <- function () {
 					min=0,
 					max=1
 				),
+				shiny::numericInput(
+					inputId = 'sens_inpatient_bed_max',
+					label = INPUT_PARAM_DESCRIPTIONS[['sens_inpatient_bed_max']],
+					value = 450
+				),
+				shiny::numericInput(
+					inputId = 'sens_ICU_bed_max',
+					label = INPUT_PARAM_DESCRIPTIONS[['sens_ICU_bed_max']],
+					value = 30
+				),
 				shiny::selectInput(
 					inputId='parameterSelect',
 					label='parameter for plotting sensitivity analysis',
