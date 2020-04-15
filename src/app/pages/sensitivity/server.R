@@ -1,14 +1,21 @@
-import::from('./vm.R', readDefault, readSensitivity, generateSensitivityPlot)
+import::from('./vm.R', readDefault, readSensitivity, generateHospSensitivityPlot, generateICUSensitivityPlot)
 
 shinyjs::disable('popsize')
 
+# Load sensitivity data
 default <- shiny::reactive({readDefault()})
 selectedParameter <- shiny::reactive({
 	names(INPUT_PARAM_DESCRIPTIONS)[INPUT_PARAM_DESCRIPTIONS == input$parameterSelect]
 })
 sensData <- shiny::reactive({readSensitivity(selectedParameter(), default())})
-output$sensitivityPlot <- plotly::renderPlotly(generateSensitivityPlot(input, selectedParameter(), sensData()))
 
+# Generate sensitivity plots
+hospPlot <- shiny::reactive({generateHospSensitivityPlot(input, selectedParameter(), sensData())})
+ICUPlot <- shiny::reactive({generateICUSensitivityPlot(input, selectedParameter(), sensData())})
+output$hospSensitivityPlot <- plotly::renderPlotly(hospPlot())
+output$ICUSensitivityPlot <- plotly::renderPlotly(ICUPlot())
+
+# Set sensitivity parameter range from user
 output$paramRangeUI <- shiny::renderUI({
     req(sensData())
 

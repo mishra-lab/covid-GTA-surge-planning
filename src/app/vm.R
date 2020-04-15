@@ -4,7 +4,7 @@
 #################################################
 
 import::from('./model/epid.R', epid)
-import::from('./utils.R', INPUT_PARAM_DESCRIPTIONS)
+import::from('./utils.R', colMax, INPUT_PARAM_DESCRIPTIONS, OUTPUT_COLUMN_DESCRIPTIONS, PLOT_OUTPUT_DESCRIPTIONS)
 
 ###FIXED############################################################################################
 # number of days, eg. 300 days. fix interval = 1
@@ -13,7 +13,7 @@ times <- seq(0,300,1)
 ###FIXED################ external (e.g. imported cases as a time series) ###########################
 # @@@ imported cases read in from csv file = travel.csv, which comprise a linear extrapolation 
 # we assume that imported cases continue via linear growth until our own epidemic peaks, thereafter zero imported cases
-parm_import <- 'import_ON'
+parm_import <- 'import_TO'
 travel_read <- read.csv(file='./data/travel.csv', header=TRUE)
 travel <- data.frame(times=times, import=rep(0, length(times)))
 travel[2:nrow(travel),] <- data.frame(travel_read$times, travel_read[names(travel_read) == parm_import])
@@ -24,13 +24,13 @@ interp <- approxfun(travel, rule=2)  #create an interpolating function using app
 # testing # [FIXED]
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # baseline proportion of non-severe who are tested if present to health-care facility or self-isolate
-tau_1 <- 0.02     
+tau_1 <- 0.1     
 # baseline proportion of hospitalized who are tested
 tau_2 <- 0.6       
 # maximum proportion tested among non-severe who present to health-care facility or self-isolate, after cases trigger increase in testing
-tau_1_max <- 0.6      
+tau_1_max <- 0.2
 # maximum proportion tested among hospitalized, after cases trigger increase in testing
-tau_2_max <- 0.9    
+tau_2_max <- 0.9
 # number of cases detected (non-severe or severe) that trigger an increase in testing
 Ncases_trigger <- 31
 
@@ -86,10 +86,6 @@ setupParams <- function (input) {
 		Ncases_trigger,           # number of detected cases that triggers the rise in testing
 		event_ss = input$event_ss,                 # number of super-spreading events
 		event_ss_modulo = input$event_ss_modulo	        # frequency of super-spreading events
-		# inpatient_bed_max = input$inpatient_bed_max,
-		# ICU_bed_max = input$ICU_bed_max,
-		# baseline_inpt_perday = input$baseline_inpt_perday,
-		# baseline_ICUpt_perday = input$baseline_ICUpt_perday
 	)
 
 	paramMat
@@ -129,66 +125,93 @@ runSimulation <- function (paramMat) {
 
 generatePlotData <- function (input, modelOut) {
 	output_cityhosp <- tibble::tibble(
-		'time (in days)' = modelOut$time,
-		'daily true incidence' = modelOut$DailyTrueIncid,
-		'daily detected cases' = modelOut$DailyDetCases,
-		'daily ED visits, city-level' = modelOut$DailyED_total,
-		'number of non-ICU inpatients, city-level' = modelOut$I_ch,
-		'number of ICU patients, city-level' = modelOut$I_cicu,
-		'daily ED visits, hospital' = modelOut$DailyED_total_hosp,
-		'number of non-ICU inpatients, hospital' = modelOut$I_ch_hosp,
-		'number of ICU patients, hospital' = modelOut$I_cicu_hosp,
-		'non-ICU inpatient bed capacity' = input$inpatient_bed_max,
-		'ICU patient bed capacity' = input$ICU_bed_max
+		time = modelOut$time,
+		DailyTrueIncid = modelOut$DailyTrueIncid,
+		DailyDetCases = modelOut$DailyDetCases,
+		DailyED_total = modelOut$DailyED_total,
+		I_ch = modelOut$I_ch,
+		I_cicu = modelOut$I_cicu,
+		DailyED_total_hosp = modelOut$DailyED_total_hosp,
+		I_ch_hosp = modelOut$I_ch_hosp,
+		I_cicu_hosp = modelOut$I_cicu_hosp,
+		inpatient_bed_max = input$inpatient_bed_max,
+		ICU_bed_max = input$ICU_bed_max
 	)
-
+	
 	output_cityhosp
 }
 
+# Find best position for legend to prevent overlap with graph
+getLegendXPosition <- function (modelOut) {
+	# Find line with highest peak
+	maxes = colMax(modelOut %>% dplyr::select(-time, -inpatient_bed_max, -ICU_bed_max))
+	peakCol = modelOut[[names(maxes[which.max(maxes)])]]
+
+	# Find peak location
+	peak_x = modelOut$time[which.max(peakCol)]
+
+	# Place legend on the left if and only if peak location > time / 2
+	if (peak_x > max(modelOut$time) / 2) {
+		return(0.05)
+	} else {
+		return(0.7)
+	}
+}
+
 generateModelPlot <- function (modelOut) {
-	fig <- plotly::plot_ly(modelOut, x=~`time (in days)`)
-	fig <- fig %>% plotly::add_trace(
-		y=~`daily ED visits, hospital`, 
-		name='daily ED visits, hospital',
-		mode='lines', 
-		type='scatter'
-	)
-	fig <- fig %>% plotly::add_trace(
-		y=~`number of non-ICU inpatients, hospital`, 
-		name='number of non-ICU inpatients, hospital', 
-		mode='lines', 
-		type='scatter'
-	)
-	fig <- fig %>% plotly::add_trace(
-		y=~`number of ICU patients, hospital`, 
-		name='number of ICU patients, hospital',
-		mode='lines', 
-		type='scatter'
-	)
+	legend_x <- getLegendXPosition(modelOut)
 
+	fig <- plotly::plot_ly(modelOut, x=~time)
 	fig <- fig %>% plotly::add_trace(
-		y=~`non-ICU inpatient bed capacity`, 
-		name='non-ICU inpatient bed capacity',
-		mode='lines', 
-		type='scatter', 
-		line=list(dash='dash')
-	)
-	fig <- fig %>% plotly::add_trace(
-		y=~`ICU patient bed capacity`, 
-		name='ICU patient bed capacity',
-		mode='lines', 
-		type='scatter', 
-		line=list(dash='dash')
-	)
-
-	fig <- fig %>% plotly::layout(
-		xaxis=list(title='Time (in days)'),
-		yaxis=list(title='Number of cases', hoverformat='.0f')
-	)
+			y=~DailyED_total_hosp,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['DailyED_total_hosp']],
+			mode='lines', 
+			type='scatter'
+		) %>% 
+		plotly::add_trace(
+			y=~I_ch_hosp,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['I_ch_hosp']], 
+			mode='lines', 
+			type='scatter'
+		) %>% 
+		plotly::add_trace(
+			y=~I_cicu_hosp,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['I_cicu_hosp']],
+			mode='lines', 
+			type='scatter'
+		) %>% 
+		plotly::add_trace(
+			y=~inpatient_bed_max,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['inpatient_bed_max']],
+			mode='lines', 
+			type='scatter', 
+			line=list(dash='dash')
+		) %>% 
+		plotly::add_trace(
+			y=~ICU_bed_max,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['ICU_bed_max']],
+			mode='lines', 
+			type='scatter', 
+			line=list(dash='dash')
+		) %>%
+		# TODO: try to figure out optimal position of legend, based on
+		# functions peaks?
+		plotly::layout(
+			xaxis=list(title=PLOT_OUTPUT_DESCRIPTIONS[['time']]),
+			yaxis=list(title='Counts', hoverformat='.0f'),
+			legend=list(
+				orientation='v',
+				x=legend_x,
+				y=0.9
+			),
+			title='Healthcare surge in hospital catchment area',
+			margin=list(t=45, b=45)
+		)
 
 	fig
 }
 
+# Reads default parameter settings for sensitivity analysis
 readDefault <- function () {
 	default <- read.csv('./data/default.csv')
 	default
@@ -198,12 +221,14 @@ readSensitivity <- function (selectedParameter, default) {
 	# Figure out which column to import based on selectedParameter
 	header <- read.csv('./data/oneway_sensitivity.csv.gz', nrows=1, header=FALSE)
 	selectedIdx <- which(header == selectedParameter)[[1]]
-	outcomeIdx <- which(header == 'I_ch')[[1]]
+	chIdx <- which(header == 'I_ch')[[1]]
+	cicuIdx <- which(header == 'I_cicu')[[1]]
 	timeIdx <- which(header == 'time')[[1]]
 	colClasses <- rep('NULL', length(header))
 
 	colClasses[[selectedIdx]] <- NA
-	colClasses[[outcomeIdx]] <- NA
+	colClasses[[chIdx]] <- NA
+	colClasses[[cicuIdx]] <- NA
 	colClasses[[timeIdx]] <- NA
 
 	# Read data, importing only necessary columns
@@ -216,17 +241,17 @@ readSensitivity <- function (selectedParameter, default) {
 	data
 }
 
-generateSensitivityPlot <- function (input, selectedParameter, data) {
+generateHospSensitivityPlot <- function (input, selectedParameter, data) {
 	paramRange <- input$parameterRange
 
 	if (!is.null(paramRange)) {
 		data <- data %>% dplyr::filter(dplyr::between(data[[selectedParameter]], paramRange[[1]], paramRange[[2]]))
 	}
 
-	fig <- data %>%
+	figHosp <- data %>%
 		plotly::plot_ly(
 			x=~time, 
-			y=~I_ch * input$catchmentProp, 
+			y=~I_ch * input$sens_catchment_hosp, 
 			type='scatter',
 			color=~data[[selectedParameter]],
 			split=~data[[selectedParameter]],
@@ -234,11 +259,74 @@ generateSensitivityPlot <- function (input, selectedParameter, data) {
 			mode='lines',
 			showlegend=FALSE
 		) %>%
+		plotly::add_trace(
+			y=~input$sens_inpatient_bed_max,
+			name=INPUT_PARAM_DESCRIPTIONS[['sens_inpatient_bed_max']],
+			mode='lines',
+			type='scatter',
+			line=list(dash='dash', color='black')
+		) %>%
 		plotly::colorbar(
 			title=''
 		) %>%
 		plotly::layout(
 			xaxis=list(title='Days since outbreak started\n(local transmission)'),
-			yaxis=list(title='Number of COVID-19 cases in catchment area', hoverformat='.0f')
+			yaxis=list(title='Number of non-ICU inpatients with COVID-19<br>in catchment area', hoverformat='.0f'),
+			annotations=list(
+				x=50,
+				y=~input$sens_inpatient_bed_max,
+				text=INPUT_PARAM_DESCRIPTIONS[['sens_inpatient_bed_max']],
+				xref='x',
+				yref='y',
+				showarrow=FALSE,
+				yanchor='bottom'
+			)
 		)
+
+	figHosp
+}
+
+generateICUSensitivityPlot <- function (input, selectedParameter, data) {
+	paramRange <- input$parameterRange
+
+	if (!is.null(paramRange)) {
+		data <- data %>% dplyr::filter(dplyr::between(data[[selectedParameter]], paramRange[[1]], paramRange[[2]]))
+	}
+
+	figICU <- data %>%
+		plotly::plot_ly(
+			x=~time, 
+			y=~I_cicu * input$sens_catchment_ICU, 
+			type='scatter',
+			color=~data[[selectedParameter]],
+			split=~data[[selectedParameter]],
+			colors=c('yellow', 'red'), 
+			mode='lines',
+			showlegend=FALSE
+		) %>%
+		plotly::add_trace(
+			y=~input$sens_ICU_bed_max,
+			name=INPUT_PARAM_DESCRIPTIONS[['sens_ICU_bed_max']],
+			mode='lines',
+			type='scatter',
+			line=list(dash='dash', color='black')
+		) %>%
+		plotly::colorbar(
+			title=''
+		) %>%
+		plotly::layout(
+			xaxis=list(title='Days since outbreak started\n(local transmission)'),
+			yaxis=list(title='Number of ICU inpatients with COVID-19<br>in catchment area', hoverformat='.0f'),
+			annotations=list(
+				x=50,
+				y=~input$sens_ICU_bed_max,
+				text=INPUT_PARAM_DESCRIPTIONS[['sens_ICU_bed_max']],
+				xref='x',
+				yref='y',
+				showarrow=FALSE,
+				yanchor='bottom'
+			)
+		)
+
+	figICU
 }
