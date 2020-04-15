@@ -4,7 +4,7 @@
 #################################################
 
 import::from('./model/epid.R', epid)
-import::from('./utils.R', INPUT_PARAM_DESCRIPTIONS)
+import::from('./utils.R', INPUT_PARAM_DESCRIPTIONS, OUTPUT_COLUMN_DESCRIPTIONS)
 
 ###FIXED############################################################################################
 # number of days, eg. 300 days. fix interval = 1
@@ -13,7 +13,7 @@ times <- seq(0,300,1)
 ###FIXED################ external (e.g. imported cases as a time series) ###########################
 # @@@ imported cases read in from csv file = travel.csv, which comprise a linear extrapolation 
 # we assume that imported cases continue via linear growth until our own epidemic peaks, thereafter zero imported cases
-parm_import <- 'import_ON'
+parm_import <- 'import_TO'
 travel_read <- read.csv(file='./data/travel.csv', header=TRUE)
 travel <- data.frame(times=times, import=rep(0, length(times)))
 travel[2:nrow(travel),] <- data.frame(travel_read$times, travel_read[names(travel_read) == parm_import])
@@ -24,13 +24,13 @@ interp <- approxfun(travel, rule=2)  #create an interpolating function using app
 # testing # [FIXED]
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # baseline proportion of non-severe who are tested if present to health-care facility or self-isolate
-tau_1 <- 0.02     
+tau_1 <- 0.1     
 # baseline proportion of hospitalized who are tested
 tau_2 <- 0.6       
 # maximum proportion tested among non-severe who present to health-care facility or self-isolate, after cases trigger increase in testing
-tau_1_max <- 0.6      
+tau_1_max <- 0.2
 # maximum proportion tested among hospitalized, after cases trigger increase in testing
-tau_2_max <- 0.9    
+tau_2_max <- 0.9
 # number of cases detected (non-severe or severe) that trigger an increase in testing
 Ncases_trigger <- 31
 
@@ -129,66 +129,70 @@ runSimulation <- function (paramMat) {
 
 generatePlotData <- function (input, modelOut) {
 	output_cityhosp <- tibble::tibble(
-		'time (in days)' = modelOut$time,
-		'daily true incidence' = modelOut$DailyTrueIncid,
-		'daily detected cases' = modelOut$DailyDetCases,
-		'daily ED visits, city-level' = modelOut$DailyED_total,
-		'number of non-ICU inpatients, city-level' = modelOut$I_ch,
-		'number of ICU patients, city-level' = modelOut$I_cicu,
-		'daily ED visits, hospital' = modelOut$DailyED_total_hosp,
-		'number of non-ICU inpatients, hospital' = modelOut$I_ch_hosp,
-		'number of ICU patients, hospital' = modelOut$I_cicu_hosp,
-		'non-ICU inpatient bed capacity' = input$inpatient_bed_max,
-		'ICU patient bed capacity' = input$ICU_bed_max
+		time = modelOut$time,
+		DailyTrueIncid = modelOut$DailyTrueIncid,
+		DailyDetCases = modelOut$DailyDetCases,
+		DailyED_total = modelOut$DailyED_total,
+		I_ch = modelOut$I_ch,
+		I_cicu = modelOut$I_cicu,
+		DailyED_total_hosp = modelOut$DailyED_total_hosp,
+		I_ch_hosp = modelOut$I_ch_hosp,
+		I_cicu_hosp = modelOut$I_cicu_hosp,
+		inpatient_bed_max = input$inpatient_bed_max,
+		ICU_bed_max = input$ICU_bed_max
 	)
-
+	
 	output_cityhosp
 }
 
 generateModelPlot <- function (modelOut) {
-	fig <- plotly::plot_ly(modelOut, x=~`time (in days)`)
+	fig <- plotly::plot_ly(modelOut, x=~time)
 	fig <- fig %>% plotly::add_trace(
-		y=~`daily ED visits, hospital`, 
-		name='daily ED visits, hospital',
+		y=~DailyED_total_hosp,
+		name=OUTPUT_COLUMN_DESCRIPTIONS[['DailyED_total_hosp']],
 		mode='lines', 
 		type='scatter'
 	)
 	fig <- fig %>% plotly::add_trace(
-		y=~`number of non-ICU inpatients, hospital`, 
-		name='number of non-ICU inpatients, hospital', 
+		y=~I_ch_hosp,
+		name=OUTPUT_COLUMN_DESCRIPTIONS[['I_ch_hosp']], 
 		mode='lines', 
 		type='scatter'
 	)
 	fig <- fig %>% plotly::add_trace(
-		y=~`number of ICU patients, hospital`, 
-		name='number of ICU patients, hospital',
+		y=~I_cicu_hosp,
+		name=OUTPUT_COLUMN_DESCRIPTIONS[['I_cicu_hosp']],
 		mode='lines', 
 		type='scatter'
 	)
-
 	fig <- fig %>% plotly::add_trace(
-		y=~`non-ICU inpatient bed capacity`, 
-		name='non-ICU inpatient bed capacity',
+		y=~inpatient_bed_max,
+		name=OUTPUT_COLUMN_DESCRIPTIONS[['inpatient_bed_max']],
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
 	)
 	fig <- fig %>% plotly::add_trace(
-		y=~`ICU patient bed capacity`, 
-		name='ICU patient bed capacity',
+		y=~ICU_bed_max,
+		name=OUTPUT_COLUMN_DESCRIPTIONS[['ICU_bed_max']],
 		mode='lines', 
 		type='scatter', 
 		line=list(dash='dash')
 	)
-
 	fig <- fig %>% plotly::layout(
-		xaxis=list(title='Time (in days)'),
-		yaxis=list(title='Number of cases', hoverformat='.0f')
+		xaxis=list(title=OUTPUT_COLUMN_DESCRIPTIONS[['time']]),
+		yaxis=list(title='Counts', hoverformat='.0f'),
+		legend=list(
+			orientation='h',
+			# x=100,
+			y=-1
+		)
 	)
 
 	fig
 }
 
+# Reads default parameter settings for sensitivity analysis
 readDefault <- function () {
 	default <- read.csv('./data/default.csv')
 	default
