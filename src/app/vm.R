@@ -4,7 +4,7 @@
 #################################################
 
 import::from('./model/epid.R', epid)
-import::from('./utils.R', INPUT_PARAM_DESCRIPTIONS, OUTPUT_COLUMN_DESCRIPTIONS, PLOT_OUTPUT_DESCRIPTIONS)
+import::from('./utils.R', colMax, INPUT_PARAM_DESCRIPTIONS, OUTPUT_COLUMN_DESCRIPTIONS, PLOT_OUTPUT_DESCRIPTIONS)
 
 ###FIXED############################################################################################
 # number of days, eg. 300 days. fix interval = 1
@@ -141,53 +141,72 @@ generatePlotData <- function (input, modelOut) {
 	output_cityhosp
 }
 
+# Find best position for legend to prevent overlap with graph
+getLegendXPosition <- function (modelOut) {
+	# Find line with highest peak
+	maxes = colMax(modelOut %>% dplyr::select(-time, -inpatient_bed_max, -ICU_bed_max))
+	peakCol = modelOut[[names(maxes[which.max(maxes)])]]
+
+	# Find peak location
+	peak_x = modelOut$time[which.max(peakCol)]
+
+	# Place legend on the left if and only if peak location > time / 2
+	if (peak_x > max(modelOut$time) / 2) {
+		return(0.05)
+	} else {
+		return(0.7)
+	}
+}
+
 generateModelPlot <- function (modelOut) {
+	legend_x <- getLegendXPosition(modelOut)
+
 	fig <- plotly::plot_ly(modelOut, x=~time)
 	fig <- fig %>% plotly::add_trace(
-		y=~DailyED_total_hosp,
-		name=PLOT_OUTPUT_DESCRIPTIONS[['DailyED_total_hosp']],
-		mode='lines', 
-		type='scatter'
-	)
-	fig <- fig %>% plotly::add_trace(
-		y=~I_ch_hosp,
-		name=PLOT_OUTPUT_DESCRIPTIONS[['I_ch_hosp']], 
-		mode='lines', 
-		type='scatter'
-	)
-	fig <- fig %>% plotly::add_trace(
-		y=~I_cicu_hosp,
-		name=PLOT_OUTPUT_DESCRIPTIONS[['I_cicu_hosp']],
-		mode='lines', 
-		type='scatter'
-	)
-	fig <- fig %>% plotly::add_trace(
-		y=~inpatient_bed_max,
-		name=PLOT_OUTPUT_DESCRIPTIONS[['inpatient_bed_max']],
-		mode='lines', 
-		type='scatter', 
-		line=list(dash='dash')
-	)
-	fig <- fig %>% plotly::add_trace(
-		y=~ICU_bed_max,
-		name=PLOT_OUTPUT_DESCRIPTIONS[['ICU_bed_max']],
-		mode='lines', 
-		type='scatter', 
-		line=list(dash='dash')
-	)
-	# TODO: try to figure out optimal position of legend, based on
-	# functions peaks?
-	fig <- fig %>% plotly::layout(
-		xaxis=list(title=PLOT_OUTPUT_DESCRIPTIONS[['time']]),
-		yaxis=list(title='Counts', hoverformat='.0f'),
-		legend=list(
-			orientation='v',
-			x=0.7,
-			y=0.9
-		),
-		title='Healthcare surge in hospital catchment area',
-		margin=list(t=45, b=45)
-	)
+			y=~DailyED_total_hosp,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['DailyED_total_hosp']],
+			mode='lines', 
+			type='scatter'
+		) %>% 
+		plotly::add_trace(
+			y=~I_ch_hosp,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['I_ch_hosp']], 
+			mode='lines', 
+			type='scatter'
+		) %>% 
+		plotly::add_trace(
+			y=~I_cicu_hosp,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['I_cicu_hosp']],
+			mode='lines', 
+			type='scatter'
+		) %>% 
+		plotly::add_trace(
+			y=~inpatient_bed_max,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['inpatient_bed_max']],
+			mode='lines', 
+			type='scatter', 
+			line=list(dash='dash')
+		) %>% 
+		plotly::add_trace(
+			y=~ICU_bed_max,
+			name=PLOT_OUTPUT_DESCRIPTIONS[['ICU_bed_max']],
+			mode='lines', 
+			type='scatter', 
+			line=list(dash='dash')
+		) %>%
+		# TODO: try to figure out optimal position of legend, based on
+		# functions peaks?
+		plotly::layout(
+			xaxis=list(title=PLOT_OUTPUT_DESCRIPTIONS[['time']]),
+			yaxis=list(title='Counts', hoverformat='.0f'),
+			legend=list(
+				orientation='v',
+				x=legend_x,
+				y=0.9
+			),
+			title='Healthcare surge in hospital catchment area',
+			margin=list(t=45, b=45)
+		)
 
 	fig
 }

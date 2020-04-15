@@ -8,6 +8,8 @@ swap_kv <- function(l) {
 	new_list
 }
 
+colMax <- function(data) sapply(data, max, na.rm = TRUE)
+
 ###### Constants
 
 INPUT_PARAM_DESCRIPTIONS <- list(
