@@ -1,5 +1,3 @@
-library(rsconnect)
-
 options(
     rsconnect.error.trace=TRUE
 )
@@ -7,7 +5,8 @@ options(
 TOKEN <- Sys.getenv('SHINYAPPS_TOKEN')
 SECRET <- Sys.getenv('SHINYAPPS_SECRET')
 
-rsconnect::setAccountInfo(name='mishra-lab',
+rsconnect::setAccountInfo(
+    name='mishra-lab',
     token=TOKEN,
     secret=SECRET
 )

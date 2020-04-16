@@ -1,0 +1,29 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - master
+jobs:
+    build:
+        name: shinyapps
+        runs-on: windows-latest
+        if: "!contains(github.event.head_commit.message, 'ci skip')"
+        env: 
+          R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+        steps:
+            - uses: actions/checkout@v1
+            - uses: r-lib/actions/setup-r@master
+              with:
+                r-version: 3.6
+            - name: Install packages
+              run: |
+                R.exe -e 'install.packages("renv")'
+                cd src
+                R.exe -e 'renv::restore()'
+            - name: Deploy shiny app
+              env:  
+                SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+                SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
+              run: |
+                cd src
+                Rscript.exe scripts/deploy_app.R
