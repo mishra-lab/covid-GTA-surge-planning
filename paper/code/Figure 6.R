@@ -34,7 +34,7 @@ if(!"reshape2" %in% rownames(installed.packages())){
 if(!"gridExtra" %in% rownames(installed.packages())){
   install.packages("gridExtra")
 }
-Clibrary(tidyr)
+library(tidyr)
 library(stringr)
 library(tidyverse)
 library(dplyr)

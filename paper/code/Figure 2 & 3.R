@@ -355,7 +355,7 @@ subset(default_LHS_exclude_uniquepSet, pSet %in% c(maxpeakIncid_pSet,
                          
 summary(default_LHS_exclude_uniquepSet$peakIncid)
 
-write.csv(epicurve_maxminIncid, "epicurve_maxminIncid.csv", row.names = F)
+write.csv(epicurve_maxminIncid, "../data/epicurve_maxminIncid.csv", row.names = F)
 
 
 

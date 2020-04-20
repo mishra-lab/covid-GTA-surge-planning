@@ -102,7 +102,7 @@ modelout$ED_visits = modelout$DailyED_ct + modelout$DailyAdmit
 ###############################################################################
 ###############################################################################
 ###Get default case
-csvFileName<- paste("ParmSet_Default",lastUpdateDate,".csv",sep="")
+csvFileName<- paste("../data/ParmSet_Default",lastUpdateDate,".csv",sep="")
 default_results<- read.csv(file=csvFileName)
 # modelout<- read.csv("OneWaySens_ParmList2020-03-13.csv", header = T)
 table(default_results$R0, exclude = NULL)
