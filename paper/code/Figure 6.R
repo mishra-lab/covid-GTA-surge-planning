@@ -49,12 +49,12 @@ library(gridExtra)
 currentDate <- Sys.Date()
 lastUpdateDate <- currentDate
 lastUpdateDate <- "2020-04-08"
-csvFileName<- paste("OneWaySens_ParmList",lastUpdateDate,".csv",sep="")
+csvFileName<- paste("../data/OneWaySens_ParmList",lastUpdateDate,".csv",sep="")
 modelout<- read.csv(file=csvFileName)
 # modelout<- read.csv("OneWaySens_ParmList2020-03-13.csv", header = T)
 table(modelout$R0, exclude = NULL)
 table(modelout$prob_test_max, exclude = NULL)
-csvFileName<- paste("ParmSet_Default",lastUpdateDate,".csv",sep="")
+csvFileName<- paste("../data/ParmSet_Default",lastUpdateDate,".csv",sep="")
 default_results<- read.csv(file=csvFileName)
 # modelout<- read.csv("OneWaySens_ParmList2020-03-13.csv", header = T)
 table(default_results$R0, exclude = NULL)
@@ -238,7 +238,7 @@ summary(modelresultsseed_backCalc$seed_prop)
 
 
 
-ggsave("admitted_backCalc_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_backCalc_90.png", width = 12, height = 12)
 
 
 ### (B) clinical severity (proportion of individuals infected with COVID-19 who require hospitalization) The influence of increasing or delayed start of interventions in the GTA on one hospital's surge: 
@@ -276,7 +276,7 @@ ggsave("admitted_backCalc_90.png", width = 12, height = 12)
  )
 
 
-ggsave("admitted_prob_admit_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_prob_admit_90.png", width = 12, height = 12)
 
 
 ### (C) earlier or later initiation of physical distancing (from start of outbreak to 60 days after outbreak started); 
@@ -315,7 +315,7 @@ ggsave("admitted_prob_admit_90.png", width = 12, height = 12)
  ) 
 
 
-ggsave("admitted_social_distancing_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_social_distancing_90.png", width = 12, height = 12)
 
 
 ###C2 drop_Reffective
@@ -348,7 +348,7 @@ ggsave("admitted_social_distancing_90.png", width = 12, height = 12)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("admitted_prob_drop_Reffective_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_prob_drop_Reffective_90.png", width = 12, height = 12)
 
 
 
@@ -387,7 +387,7 @@ ggsave("admitted_prob_drop_Reffective_90.png", width = 12, height = 12)
      color = guide_colorbar(order = 1),
      fill = guide_legend(order = 0)))
 
-ggsave("admitted_prob_test_max_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_prob_test_max_90.png", width = 12, height = 12)
 
 
 grid.arrange(admitted_backCalc_90,
@@ -438,7 +438,7 @@ grid.arrange(admitted_backCalc_90,
      color = guide_colorbar(order = 1),
      fill = guide_legend(order = 0)))
 
-ggsave("admitted_R0_L2.0_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_R0_L2.0_90.png", width = 12, height = 12)
 
 
 ###############################################################################
@@ -473,7 +473,7 @@ ggsave("admitted_R0_L2.0_90.png", width = 12, height = 12)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("admitted_R0_M2.0_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_R0_M2.0_90.png", width = 12, height = 12)
 
 
 ###############################################################################
@@ -508,7 +508,7 @@ ggsave("admitted_R0_M2.0_90.png", width = 12, height = 12)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("admitted_dur_admitted_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_dur_admitted_90.png", width = 12, height = 12)
 
 
 ###############################################################################
@@ -543,7 +543,7 @@ ggsave("admitted_dur_admitted_90.png", width = 12, height = 12)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("admitted_prob_test_90.png", width = 12, height = 12)
+ggsave("../fig/admitted_prob_test_90.png", width = 12, height = 12)
 
 
 grid.arrange(admitted_prob_test_90,
@@ -599,7 +599,7 @@ grid.arrange(admitted_prob_test_90,
      fill = guide_legend(order = 0)))
 
 
-ggsave("ICU_seed_backCalc_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_seed_backCalc_90.png", width = 12, height = 12)
 
 
 
@@ -636,7 +636,7 @@ ggsave("ICU_seed_backCalc_90.png", width = 12, height = 12)
      fill = guide_legend(order = 0)))
 
 
-ggsave("ICU_prob_admit_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_prob_admit_90.png", width = 12, height = 12)
 
 
 
@@ -672,7 +672,7 @@ ggsave("ICU_prob_admit_90.png", width = 12, height = 12)
      color = guide_colorbar(order = 1),
      fill = guide_legend(order = 0)))
 
-ggsave("ICU_social_distancing_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_social_distancing_90.png", width = 12, height = 12)
 
 
 ###C2 drop_Reffective
@@ -706,7 +706,7 @@ ggsave("ICU_social_distancing_90.png", width = 12, height = 12)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("ICU_prob_drop_Reffective_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_prob_drop_Reffective_90.png", width = 12, height = 12)
 
 
 
@@ -742,7 +742,7 @@ ggsave("ICU_prob_drop_Reffective_90.png", width = 12, height = 12)
      fill = guide_legend(order = 0)))
 
 
-ggsave("ICU_prob_test_max_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_prob_test_max_90.png", width = 12, height = 12)
 
 
 grid.arrange(ICU_seed_backCalc_90,
@@ -781,7 +781,7 @@ grid.arrange(ICU_seed_backCalc_90,
      color = guide_colorbar(order = 1),
      fill = guide_legend(order = 0)))
 
-ggsave("ICU_dur_admitted_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_dur_admitted_90.png", width = 12, height = 12)
 
 
 
@@ -812,7 +812,7 @@ ggsave("ICU_dur_admitted_90.png", width = 12, height = 12)
      ggtitle("G)")) #+
 
 
-ggsave("ICU_R0_L2.0_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_R0_L2.0_90.png", width = 12, height = 12)
 
 
 ###############################################################################
@@ -847,7 +847,7 @@ ggsave("ICU_R0_L2.0_90.png", width = 12, height = 12)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("ICU_R0_M2.0_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_R0_M2.0_90.png", width = 12, height = 12)
 
 
 
@@ -891,7 +891,7 @@ table(modelout$dur_icu, exclude = NULL)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("ICU_dur_icu_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_dur_icu_90.png", width = 12, height = 12)
 
 
 
@@ -931,7 +931,7 @@ nrow(modelresultscondprob_icu)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("ICU_condprob_icu_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_condprob_icu_90.png", width = 12, height = 12)
 
 
 
@@ -970,7 +970,7 @@ ggsave("ICU_condprob_icu_90.png", width = 12, height = 12)
       color = guide_colorbar(order = 1),
       fill = guide_legend(order = 0)))
 
-ggsave("ICU_prob_test_90.png", width = 12, height = 12)
+ggsave("../fig/ICU_prob_test_90.png", width = 12, height = 12)
 
 grid.arrange(ICU_seed_backCalc_90,
              ICU_prob_admit_90,

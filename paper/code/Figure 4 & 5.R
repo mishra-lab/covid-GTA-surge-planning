@@ -51,7 +51,7 @@ library(gridExtra)
 currentDate <- Sys.Date()
 # lastUpdateDate <- currentDate
 lastUpdateDate <- "2020-04-08"
-csvFileName<- paste("LHS_int_fix_drop_Reffective",lastUpdateDate,".csv",sep="")
+csvFileName<- paste("../data/LHS_int_fix_drop_Reffective",lastUpdateDate,".csv",sep="")
 modelout<- read.csv(file=csvFileName)
 # modelout<- read.csv("OneWaySens_ParmList2020-03-15.csv", header = T)
 table(modelout$R0, exclude = NULL)
@@ -69,7 +69,7 @@ sj_inpatients = 0.03974
 sj_ICU = 0.02294
 sj_ED = 0.04027
 
-epicurve_maxminIncid <- read.csv("epicurve_maxminIncid.csv")
+epicurve_maxminIncid <- read.csv("../data/epicurve_maxminIncid.csv")
 
 ###############################################################################
 ##Caculate ED visits
@@ -202,7 +202,7 @@ modelresults_FSD = subset(modelresults, Scenario %in% c("fast/large", "slow/smal
                                   "slow/small" = "#619CFF", 
                                   "pre-outbreak non-COVID\n non-ICU inpatients*" = "black")))
 
-ggsave("anyserivces_90_predict_SMH.png", width = 14, height = 10)
+ggsave("../fig/anyserivces_90_predict_SMH.png", width = 14, height = 10)
 
 (anyserivces_90_predict_cuty = 
     ggplot() +
@@ -239,7 +239,7 @@ ggsave("anyserivces_90_predict_SMH.png", width = 14, height = 10)
     theme(legend.position = "none"))
 
 
-ggsave("anyserivces_90_predict_SMH_cuty.png", width = 12, height = 10)
+ggsave("../fig/anyserivces_90_predict_SMH_cuty.png", width = 12, height = 10)
 
 
 ###################################################
@@ -277,7 +277,7 @@ ggsave("anyserivces_90_predict_SMH_cuty.png", width = 12, height = 10)
                                  "slow/small" = "#619CFF", 
                                  "pre-outbreak non-COVID\n ICU inpatients*" = "black")))
 
-ggsave("ICU_90_predict_SMH.png", width = 14, height = 10)
+ggsave("../fig/ICU_90_predict_SMH.png", width = 14, height = 10)
 
 
 
@@ -312,14 +312,14 @@ ggsave("ICU_90_predict_SMH.png", width = 14, height = 10)
                                   "slow/small" = "#619CFF", 
                                   "pre-outbreak non-COVID ICU inpatients" = "black")) + 
     theme(legend.position = "none"))
-ggsave("ICU_90_predict_SMH_cuty.png", width = 12, height = 10)
+ggsave("../fig/ICU_90_predict_SMH_cuty.png", width = 12, height = 10)
 
 #anyserivces_90 & icu 90
 SMH_figure4 = subset(modelresults, Scenario %in% c("fast/large", "slow/small", "default"))
 SMH_figure4$SMH_inpatients = SMH_figure4$I_cicu * smh_ICU
 SMH_figure4$SMH_ICUinpatients = SMH_figure4$I_ch * smh_inpatients
 
-write.csv(SMH_figure4, "SMH_figure4.csv")
+write.csv(SMH_figure4, "../data/SMH_figure4.csv")
 
 GTA = subset(modelresults, time == 90 & 
                Scenario %in% c("fast/large", "slow/small", "default"))[, c("Scenario", "I_ch", "I_cicu")]
@@ -408,7 +408,7 @@ summary(Num_inpatient_medicine_SJ$med_inpatients_ICU)
                                  "slow/small" = "#619CFF", 
                                  "pre-outbreak non-COVID\n non-ICU inpatients*" = "black")))
 
-ggsave("anyserivces_90_predict_SJ.png", width = 14, height = 10)
+ggsave("../fig/anyserivces_90_predict_SJ.png", width = 14, height = 10)
 
 
 (anyserivces_90_predict_SJ_cuty = 
@@ -444,7 +444,7 @@ ggsave("anyserivces_90_predict_SJ.png", width = 14, height = 10)
     theme(legend.position = "none")
   )
 
-ggsave("anyserivces_90_predict_SJ_cuty.png", width = 12, height = 10)
+ggsave("../fig/anyserivces_90_predict_SJ_cuty.png", width = 12, height = 10)
 
 
 ###################################################
@@ -482,7 +482,7 @@ ggsave("anyserivces_90_predict_SJ_cuty.png", width = 12, height = 10)
                                  "slow/small" = "#619CFF", 
                                  "pre-outbreak non-COVID\n ICU inpatients*" = "black")))
 
-ggsave("ICU_90_predict_SJ.png", width = 14, height = 10)
+ggsave("../fig/ICU_90_predict_SJ.png", width = 14, height = 10)
 
 
 (ICU_90_predict_SJ_cuty = 
@@ -518,7 +518,7 @@ ggsave("ICU_90_predict_SJ.png", width = 14, height = 10)
                                   "pre-outbreak median\n(March-May, 2014-2019)" = "black")) + 
     theme(legend.position = "none"))
 
-ggsave("ICU_90_predict_SJ_cuty.png", width = 12, height = 10)
+ggsave("../fig/ICU_90_predict_SJ_cuty.png", width = 12, height = 10)
 
 
 
@@ -527,5 +527,5 @@ SJ_figure4 = subset(modelresults, Scenario %in% c("fast/large", "slow/small", "d
 SJ_figure4$SMH_inpatients = SJ_figure4$I_cicu * sj_ICU
 SJ_figure4$SMH_ICUinpatients = SJ_figure4$I_ch * sj_inpatients
 
-write.csv(SJ_figure4, "SJ_figure4.csv")
+write.csv(SJ_figure4, "../data/SJ_figure4.csv")
 

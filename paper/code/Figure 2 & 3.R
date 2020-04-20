@@ -58,7 +58,7 @@ library(gridExtra)
 currentDate <- Sys.Date()
 lastUpdateDate <- currentDate
 lastUpdateDate <- "2020-04-08"
-csvFileName<- paste("LHS_int_fix_drop_Reffective",lastUpdateDate,".csv",sep="")
+csvFileName<- paste("../data/LHS_int_fix_drop_Reffective",lastUpdateDate,".csv",sep="")
 modelout<- read.csv(file=csvFileName)
 # modelout<- read.csv("OneWaySens_ParmList2020-03-13.csv", header = T)
 table(modelout$R0, exclude = NULL)
@@ -67,7 +67,7 @@ length(unique(modelout$pSet))
 
 ###############################################
 #get default case
-csvFileName<- paste("ParmSet_Default",lastUpdateDate,".csv",sep="")
+csvFileName<- paste("../data/ParmSet_Default",lastUpdateDate,".csv",sep="")
 default_results<- read.csv(file=csvFileName)
 # modelout<- read.csv("OneWaySens_ParmList2020-03-13.csv", header = T)
 table(default_results$R0, exclude = NULL)
@@ -133,7 +133,7 @@ output_default_LHS$Province.State.Set = paste(output_default_LHS$Province.State,
 #################################################
 ###Read data from other countries
 #################################################
-epidemic_f = read.csv("epidemic_f.csv", header = T)
+epidemic_f = read.csv("../data/epidemic_f.csv", header = T)
 
 epidemic_f$Province.State = ifelse(epidemic_f$Province.State == "Italy_Lombardy", "Lombardy, Italy",
                                    ifelse(epidemic_f$Province.State == "Canada_Toronto", "GTA, observed",
@@ -274,7 +274,7 @@ ggplot(output_default_LHS_combine_clean, aes(x = time, y = case.per100k,
                                 "#00BF7D",
                                 "#FF6A98"))+
     theme(legend.title=element_blank()))
-ggsave("Figure2_constraints.png", width = 12, height = 10)
+ggsave("../fig/Figure2_constraints.png", width = 12, height = 10)
 
 
 
@@ -385,7 +385,7 @@ write.csv(epicurve_maxminIncid, "epicurve_maxminIncid.csv", row.names = F)
    ggtitle("A)")
  )
 
-ggsave("incidenceGTA_peakIncid.png", width = 12, height = 10)
+ggsave("../fig/incidenceGTA_peakIncid.png", width = 12, height = 10)
 
 ###daily incidence use prevalence to change to daily (area bar) top and bottom for IQR
 ### (B) modeled daily number of hospital admissions for individuals with COVID-19 alongside pre-outbreak data on the daily median number of hospital admissions between March-August 2019 in the GTA; 
@@ -411,7 +411,7 @@ ggsave("incidenceGTA_peakIncid.png", width = 12, height = 10)
     ggtitle("B)")
 )
 
-ggsave("DailyAdmisstionGTA_peakIncid.png", width = 12, height = 10)
+ggsave("../fig/DailyAdmisstionGTA_peakIncid.png", width = 12, height = 10)
 # Default S [1] 2388273
 
 # 1,559 			 1,072 	 1,611 
@@ -440,7 +440,7 @@ ggsave("DailyAdmisstionGTA_peakIncid.png", width = 12, height = 10)
   
 )
 
-ggsave("DailyICUGTA_peakIncid.png", width = 12, height = 10)
+ggsave("../fig/DailyICUGTA_peakIncid.png", width = 12, height = 10)
 
 
 ########################################################################################################################
@@ -538,7 +538,7 @@ output_default_LHS_combine_clean_sub_line = subset(output_default_LHS_combine_cl
   
 
   )
-ggsave("Figure2_constraints_update_peakInsid_dot.png", width = 16, height = 10)
+ggsave("../fig/Figure2_constraints_update_peakInsid_dot.png", width = 16, height = 10)
 
 
 # write.csv(output_default_LHS_combine_clean, "Figure2.csv", row.names = F)
@@ -570,7 +570,7 @@ ggsave("Figure2_constraints_update_peakInsid_dot.png", width = 16, height = 10)
                                 #"#A3A500")) + 
     theme(legend.title=element_blank())# +
 )
-ggsave("Figure2_update_full_range.png", width = 14, height = 10)
+ggsave("../fig/Figure2_update_full_range.png", width = 14, height = 10)
 
 
 

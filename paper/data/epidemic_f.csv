@@ -1,0 +1,167 @@
+"","Country.Region","Province.State","Date","CaseCount","flag_sum","min","max","pop.size","Cumulative_Case","case.per100k","time"
+"1","Italy","Italy_Lombardy",2020-02-21,15,0,NA,NA,10040000,NA,0.149,1
+"2","Italy","Italy_Lombardy",2020-02-22,55,0,NA,NA,10040000,NA,0.548,2
+"3","Italy","Italy_Lombardy",2020-02-23,112,0,NA,NA,10040000,NA,1.116,3
+"4","Italy","Italy_Lombardy",2020-02-24,173,0,NA,NA,10040000,NA,1.723,4
+"5","Italy","Italy_Lombardy",2020-02-25,240,0,NA,NA,10040000,NA,2.39,5
+"6","Italy","Italy_Lombardy",2020-02-26,305,0,NA,NA,10040000,NA,3.038,6
+"7","Italy","Italy_Lombardy",2020-02-27,403,0,NA,NA,10040000,NA,4.014,7
+"8","Italy","Italy_Lombardy",2020-02-28,531,0,NA,NA,10040000,NA,5.289,8
+"9","Italy","Italy_Lombardy",2020-02-29,615,0,NA,NA,10040000,NA,6.125,9
+"10","Italy","Italy_Lombardy",2020-03-01,984,0,NA,NA,10040000,NA,9.801,10
+"11","Italy","Italy_Lombardy",2020-03-02,1254,0,NA,NA,10040000,NA,12.49,11
+"12","Italy","Italy_Lombardy",2020-03-03,1520,0,NA,NA,10040000,NA,15.139,12
+"13","Italy","Italy_Lombardy",2020-03-04,1820,0,NA,NA,10040000,NA,18.127,13
+"14","Italy","Italy_Lombardy",2020-03-05,2251,0,NA,NA,10040000,NA,22.42,14
+"15","Italy","Italy_Lombardy",2020-03-06,2612,0,NA,NA,10040000,NA,26.016,15
+"16","Italy","Italy_Lombardy",2020-03-07,3420,0,NA,NA,10040000,NA,34.064,16
+"17","Italy","Italy_Lombardy",2020-03-08,4189,0,NA,NA,10040000,NA,41.723,17
+"18","Italy","Italy_Lombardy",2020-03-09,5469,0,NA,NA,10040000,NA,54.472,18
+"19","Italy","Italy_Lombardy",2020-03-10,5791,0,NA,NA,10040000,NA,57.679,19
+"20","Italy","Italy_Lombardy",2020-03-11,7280,0,NA,NA,10040000,NA,72.51,20
+"21","Italy","Italy_Lombardy",2020-03-12,8725,0,NA,NA,10040000,NA,86.902,21
+"22","Italy","Italy_Lombardy",2020-03-13,9820,0,NA,NA,10040000,NA,97.809,22
+"23","Italy","Italy_Lombardy",2020-03-14,11685,0,NA,NA,10040000,NA,116.384,23
+"24","Italy","Italy_Lombardy",2020-03-15,13272,0,NA,NA,10040000,NA,132.191,24
+"25","Italy","Italy_Lombardy",2020-03-16,14649,0,NA,NA,10040000,NA,145.906,25
+"26","China","China_Hong Kong",2020-01-25,5,0,NA,NA,7392000,NA,0.068,1
+"27","China","China_Hong Kong",2020-01-26,8,0,NA,NA,7392000,NA,0.108,2
+"28","China","China_Hong Kong",2020-01-27,8,0,NA,NA,7392000,NA,0.108,3
+"29","China","China_Hong Kong",2020-01-28,8,0,NA,NA,7392000,NA,0.108,4
+"30","China","China_Hong Kong",2020-01-29,10,0,NA,NA,7392000,NA,0.135,5
+"31","China","China_Hong Kong",2020-01-30,10,0,NA,NA,7392000,NA,0.135,6
+"32","China","China_Hong Kong",2020-01-31,12,0,NA,NA,7392000,NA,0.162,7
+"33","China","China_Hong Kong",2020-02-01,13,0,NA,NA,7392000,NA,0.176,8
+"34","China","China_Hong Kong",2020-02-02,15,0,NA,NA,7392000,NA,0.203,9
+"35","China","China_Hong Kong",2020-02-03,15,0,NA,NA,7392000,NA,0.203,10
+"36","China","China_Hong Kong",2020-02-04,17,0,NA,NA,7392000,NA,0.23,11
+"37","China","China_Hong Kong",2020-02-05,21,0,NA,NA,7392000,NA,0.284,12
+"38","China","China_Hong Kong",2020-02-06,24,0,NA,NA,7392000,NA,0.325,13
+"39","China","China_Hong Kong",2020-02-07,25,0,NA,NA,7392000,NA,0.338,14
+"40","China","China_Hong Kong",2020-02-08,26,0,NA,NA,7392000,NA,0.352,15
+"41","China","China_Hong Kong",2020-02-09,29,0,NA,NA,7392000,NA,0.392,16
+"42","China","China_Hong Kong",2020-02-10,38,0,NA,NA,7392000,NA,0.514,17
+"43","China","China_Hong Kong",2020-02-11,49,0,NA,NA,7392000,NA,0.663,18
+"44","China","China_Hong Kong",2020-02-12,50,0,NA,NA,7392000,NA,0.676,19
+"45","China","China_Hong Kong",2020-02-13,53,0,NA,NA,7392000,NA,0.717,20
+"46","China","China_Hong Kong",2020-02-14,56,0,NA,NA,7392000,NA,0.758,21
+"47","China","China_Hong Kong",2020-02-15,56,0,NA,NA,7392000,NA,0.758,22
+"48","China","China_Hong Kong",2020-02-16,57,0,NA,NA,7392000,NA,0.771,23
+"49","China","China_Hong Kong",2020-02-17,60,0,NA,NA,7392000,NA,0.812,24
+"50","China","China_Hong Kong",2020-02-18,62,0,NA,NA,7392000,NA,0.839,25
+"51","China","China_Hong Kong",2020-02-19,63,0,NA,NA,7392000,NA,0.852,26
+"52","China","China_Hong Kong",2020-02-20,68,0,NA,NA,7392000,NA,0.92,27
+"53","China","China_Hong Kong",2020-02-21,68,0,NA,NA,7392000,NA,0.92,28
+"54","China","China_Hong Kong",2020-02-22,69,0,NA,NA,7392000,NA,0.933,29
+"55","China","China_Hong Kong",2020-02-23,74,0,NA,NA,7392000,NA,1.001,30
+"56","China","China_Hong Kong",2020-02-24,79,0,NA,NA,7392000,NA,1.069,31
+"57","China","China_Hong Kong",2020-02-25,84,0,NA,NA,7392000,NA,1.136,32
+"58","China","China_Hong Kong",2020-02-26,91,0,NA,NA,7392000,NA,1.231,33
+"59","China","China_Hong Kong",2020-02-27,92,0,NA,NA,7392000,NA,1.245,34
+"60","China","China_Hong Kong",2020-02-28,94,0,NA,NA,7392000,NA,1.272,35
+"61","China","China_Hong Kong",2020-02-29,95,0,NA,NA,7392000,NA,1.285,36
+"62","China","China_Hong Kong",2020-03-01,96,0,NA,NA,7392000,NA,1.299,37
+"63","China","China_Hong Kong",2020-03-02,100,0,NA,NA,7392000,NA,1.353,38
+"64","China","China_Hong Kong",2020-03-03,100,0,NA,NA,7392000,NA,1.353,39
+"65","China","China_Hong Kong",2020-03-04,105,0,NA,NA,7392000,NA,1.42,40
+"66","China","China_Hong Kong",2020-03-05,105,0,NA,NA,7392000,NA,1.42,41
+"67","China","China_Hong Kong",2020-03-06,107,0,NA,NA,7392000,NA,1.448,42
+"68","China","China_Hong Kong",2020-03-07,108,0,NA,NA,7392000,NA,1.461,43
+"69","China","China_Hong Kong",2020-03-08,114,0,NA,NA,7392000,NA,1.542,44
+"70","China","China_Hong Kong",2020-03-09,115,0,NA,NA,7392000,NA,1.556,45
+"71","China","China_Hong Kong",2020-03-10,120,0,NA,NA,7392000,NA,1.623,46
+"72","China","China_Hong Kong",2020-03-11,126,0,NA,NA,7392000,NA,1.705,47
+"73","China","China_Hong Kong",2020-03-12,129,0,NA,NA,7392000,NA,1.745,48
+"74","China","China_Hong Kong",2020-03-13,134,0,NA,NA,7392000,NA,1.813,49
+"75","China","China_Hong Kong",2020-03-14,140,0,NA,NA,7392000,NA,1.894,50
+"76","China","China_Hong Kong",2020-03-15,145,0,NA,NA,7392000,NA,1.962,51
+"77","China","China_Hong Kong",2020-03-16,155,0,NA,NA,7392000,NA,2.097,52
+"78","China","China_Hong Kong",2020-03-17,162,0,NA,NA,7392000,NA,2.192,53
+"79","China","China_Hong Kong",2020-03-18,192,0,NA,NA,7392000,NA,2.597,54
+"80","Singapore","Singapore",2020-01-24,3,0,NA,NA,5612000,NA,0.053,1
+"81","Singapore","Singapore",2020-01-25,3,0,NA,NA,5612000,NA,0.053,2
+"82","Singapore","Singapore",2020-01-26,4,0,NA,NA,5612000,NA,0.071,3
+"83","Singapore","Singapore",2020-01-27,5,0,NA,NA,5612000,NA,0.089,4
+"84","Singapore","Singapore",2020-01-28,7,0,NA,NA,5612000,NA,0.125,5
+"85","Singapore","Singapore",2020-01-29,7,0,NA,NA,5612000,NA,0.125,6
+"86","Singapore","Singapore",2020-01-30,10,0,NA,NA,5612000,NA,0.178,7
+"87","Singapore","Singapore",2020-01-31,13,0,NA,NA,5612000,NA,0.232,8
+"88","Singapore","Singapore",2020-02-01,16,0,NA,NA,5612000,NA,0.285,9
+"89","Singapore","Singapore",2020-02-02,18,0,NA,NA,5612000,NA,0.321,10
+"90","Singapore","Singapore",2020-02-03,18,0,NA,NA,5612000,NA,0.321,11
+"91","Singapore","Singapore",2020-02-04,24,0,NA,NA,5612000,NA,0.428,12
+"92","Singapore","Singapore",2020-02-05,28,0,NA,NA,5612000,NA,0.499,13
+"93","Singapore","Singapore",2020-02-06,28,0,NA,NA,5612000,NA,0.499,14
+"94","Singapore","Singapore",2020-02-07,30,0,NA,NA,5612000,NA,0.535,15
+"95","Singapore","Singapore",2020-02-08,33,0,NA,NA,5612000,NA,0.588,16
+"96","Singapore","Singapore",2020-02-09,40,0,NA,NA,5612000,NA,0.713,17
+"97","Singapore","Singapore",2020-02-10,45,0,NA,NA,5612000,NA,0.802,18
+"98","Singapore","Singapore",2020-02-11,47,0,NA,NA,5612000,NA,0.837,19
+"99","Singapore","Singapore",2020-02-12,50,0,NA,NA,5612000,NA,0.891,20
+"100","Singapore","Singapore",2020-02-13,58,0,NA,NA,5612000,NA,1.033,21
+"101","Singapore","Singapore",2020-02-14,67,0,NA,NA,5612000,NA,1.194,22
+"102","Singapore","Singapore",2020-02-15,72,0,NA,NA,5612000,NA,1.283,23
+"103","Singapore","Singapore",2020-02-16,75,0,NA,NA,5612000,NA,1.336,24
+"104","Singapore","Singapore",2020-02-17,77,0,NA,NA,5612000,NA,1.372,25
+"105","Singapore","Singapore",2020-02-18,81,0,NA,NA,5612000,NA,1.443,26
+"106","Singapore","Singapore",2020-02-19,84,0,NA,NA,5612000,NA,1.497,27
+"107","Singapore","Singapore",2020-02-20,84,0,NA,NA,5612000,NA,1.497,28
+"108","Singapore","Singapore",2020-02-21,85,0,NA,NA,5612000,NA,1.515,29
+"109","Singapore","Singapore",2020-02-22,85,0,NA,NA,5612000,NA,1.515,30
+"110","Singapore","Singapore",2020-02-23,89,0,NA,NA,5612000,NA,1.586,31
+"111","Singapore","Singapore",2020-02-24,89,0,NA,NA,5612000,NA,1.586,32
+"112","Singapore","Singapore",2020-02-25,91,0,NA,NA,5612000,NA,1.622,33
+"113","Singapore","Singapore",2020-02-26,93,0,NA,NA,5612000,NA,1.657,34
+"114","Singapore","Singapore",2020-02-27,93,0,NA,NA,5612000,NA,1.657,35
+"115","Singapore","Singapore",2020-02-28,93,0,NA,NA,5612000,NA,1.657,36
+"116","Singapore","Singapore",2020-02-29,102,0,NA,NA,5612000,NA,1.818,37
+"117","Singapore","Singapore",2020-03-01,106,0,NA,NA,5612000,NA,1.889,38
+"118","Singapore","Singapore",2020-03-02,108,0,NA,NA,5612000,NA,1.924,39
+"119","Singapore","Singapore",2020-03-03,110,0,NA,NA,5612000,NA,1.96,40
+"120","Singapore","Singapore",2020-03-04,110,0,NA,NA,5612000,NA,1.96,41
+"121","Singapore","Singapore",2020-03-05,117,0,NA,NA,5612000,NA,2.085,42
+"122","Singapore","Singapore",2020-03-06,130,0,NA,NA,5612000,NA,2.316,43
+"123","Singapore","Singapore",2020-03-07,138,0,NA,NA,5612000,NA,2.459,44
+"124","Singapore","Singapore",2020-03-08,150,0,NA,NA,5612000,NA,2.673,45
+"125","Singapore","Singapore",2020-03-09,150,0,NA,NA,5612000,NA,2.673,46
+"126","Singapore","Singapore",2020-03-10,160,0,NA,NA,5612000,NA,2.851,47
+"127","Singapore","Singapore",2020-03-11,178,0,NA,NA,5612000,NA,3.172,48
+"128","Singapore","Singapore",2020-03-12,178,0,NA,NA,5612000,NA,3.172,49
+"129","Singapore","Singapore",2020-03-13,200,0,NA,NA,5612000,NA,3.564,50
+"130","Singapore","Singapore",2020-03-14,212,0,NA,NA,5612000,NA,3.778,51
+"131","Singapore","Singapore",2020-03-15,226,0,NA,NA,5612000,NA,4.027,52
+"132","Singapore","Singapore",2020-03-16,243,0,NA,NA,5612000,NA,4.33,53
+"133","Singapore","Singapore",2020-03-17,266,0,NA,NA,5612000,NA,4.74,54
+"134","Singapore","Singapore",2020-03-18,313,0,NA,NA,5612000,NA,5.577,55
+"135","Canada","Canada_Toronto",2020-02-23,3,0,0,544,6196731,"100-1000",0.048,1
+"136","Canada","Canada_Toronto",2020-02-24,3,0,0,544,6196731,"100-1000",0.048,2
+"137","Canada","Canada_Toronto",2020-02-25,3,0,0,544,6196731,"100-1000",0.048,3
+"138","Canada","Canada_Toronto",2020-02-26,4,0,0,544,6196731,"100-1000",0.065,4
+"139","Canada","Canada_Toronto",2020-02-27,6,0,0,544,6196731,"100-1000",0.097,5
+"140","Canada","Canada_Toronto",2020-02-28,10,0,0,544,6196731,"100-1000",0.161,6
+"141","Canada","Canada_Toronto",2020-02-29,15,0,0,544,6196731,"100-1000",0.242,7
+"142","Canada","Canada_Toronto",2020-03-01,16,0,0,544,6196731,"100-1000",0.258,8
+"143","Canada","Canada_Toronto",2020-03-02,16,0,0,544,6196731,"100-1000",0.258,9
+"144","Canada","Canada_Toronto",2020-03-03,19,0,0,544,6196731,"100-1000",0.307,10
+"145","Canada","Canada_Toronto",2020-03-04,19,0,0,544,6196731,"100-1000",0.307,11
+"146","Canada","Canada_Toronto",2020-03-05,21,0,0,544,6196731,"100-1000",0.339,12
+"147","Canada","Canada_Toronto",2020-03-06,25,0,0,544,6196731,"100-1000",0.403,13
+"148","Canada","Canada_Toronto",2020-03-07,25,0,0,544,6196731,"100-1000",0.403,14
+"149","Canada","Canada_Toronto",2020-03-08,31,0,0,544,6196731,"100-1000",0.5,15
+"150","Canada","Canada_Toronto",2020-03-09,36,0,0,544,6196731,"100-1000",0.581,16
+"151","Canada","Canada_Toronto",2020-03-10,45,0,0,544,6196731,"100-1000",0.726,17
+"152","Canada","Canada_Toronto",2020-03-11,67,0,0,544,6196731,"100-1000",1.081,18
+"153","Canada","Canada_Toronto",2020-03-12,87,0,0,544,6196731,"100-1000",1.404,19
+"154","Canada","Canada_Toronto",2020-03-13,105,0,0,544,6196731,"100-1000",1.694,20
+"155","Canada","Canada_Toronto",2020-03-14,117,0,0,544,6196731,"100-1000",1.888,21
+"156","Canada","Canada_Toronto",2020-03-15,137,0,0,544,6196731,"100-1000",2.211,22
+"157","Canada","Canada_Toronto",2020-03-16,151,0,0,544,6196731,"100-1000",2.437,23
+"158","Canada","Canada_Toronto",2020-03-17,172,0,0,544,6196731,"100-1000",2.776,24
+"159","Canada","Canada_Toronto",2020-03-18,192,0,0,544,6196731,"100-1000",3.098,25
+"160","Canada","Canada_Toronto",2020-03-19,219,0,0,544,6196731,"100-1000",3.534,26
+"161","Canada","Canada_Toronto",2020-03-20,266,0,0,544,6196731,"100-1000",4.293,27
+"162","Canada","Canada_Toronto",2020-03-21,312,0,0,544,6196731,"100-1000",5.035,28
+"163","Canada","Canada_Toronto",2020-03-22,345,0,0,544,6196731,"100-1000",5.567,29
+"164","Canada","Canada_Toronto",2020-03-23,387,0,0,544,6196731,"100-1000",6.245,30
+"165","Canada","Canada_Toronto",2020-03-24,470,0,0,544,6196731,"100-1000",7.585,31
+"166","Canada","Canada_Toronto",2020-03-25,544,0,0,544,6196731,"100-1000",8.779,32
