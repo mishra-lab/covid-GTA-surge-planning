@@ -2,8 +2,8 @@
 
 # [Click here to visit the shiny application!](https://mishra-lab.shinyapps.io/covid-GTA-surge-planning/)
 
-<img src='./screenshot_model.png' width='55%' height='55%' />
-<img src='./screenshot_sensitivity.png' width='55%' height='55%' />
+<img src='./screenshots/screenshot_model.png' width='55%' height='55%' />
+<img src='./screenshots/screenshot_sensitivity.png' width='55%' height='55%' />
 
 ## Overview of the repository
 
