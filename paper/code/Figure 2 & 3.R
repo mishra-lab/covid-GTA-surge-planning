@@ -198,7 +198,7 @@ output_default_LHS_combine$exclude = ifelse(output_default_LHS_combine$time == 3
                                                  output_default_LHS_combine$case.per100k < lowerrangecut, 1, 0)
 table(output_default_LHS_combine$exclude, exclude = NULL)  
 
-# write.csv(output_default_LHS_combine, "output_default_LHS_combine.csv", row.names = F)
+write.csv(output_default_LHS_combine, "../data/output_default_LHS_combine.csv", row.names = F)
 
 output_default_LHS_combine_clean = subset(output_default_LHS_combine, 
                                              !(pSet %in% subset(output_default_LHS_combine, 
@@ -541,7 +541,7 @@ output_default_LHS_combine_clean_sub_line = subset(output_default_LHS_combine_cl
 ggsave("../fig/Figure2_constraints_update_peakInsid_dot.png", width = 16, height = 10)
 
 
-# write.csv(output_default_LHS_combine_clean, "Figure2.csv", row.names = F)
+write.csv(output_default_LHS_combine_clean, "../data/Figure2.csv", row.names = F)
 
 
 (Figure2_update_full_range = 

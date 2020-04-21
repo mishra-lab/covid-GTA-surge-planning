@@ -2,6 +2,9 @@
 /data/LHS_int_fix_drop_Reffective*
 /data/OneWaySens_ParmList*
 /data/ParmSet_Default*
+/data/epicurve_maxminIncid.csv
+/data/Figure2.csv
+/data/output_default_LHS_combine.csv
 
 # SMH-, SJHC- specific data
 /data/SMH*.csv
