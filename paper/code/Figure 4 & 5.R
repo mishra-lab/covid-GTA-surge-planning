@@ -124,6 +124,11 @@ SMH_admission = SMH_admission %>% separate(DayMonthYear, c("Day", "Month", "Year
 SMH_admission$Day = str_pad(SMH_admission$Day, 2, pad = "0")
 SMH_admission$Month = str_pad(SMH_admission$Month, 2, pad = "0")
 
+
+SMH_admission$Number.of.Inpatients.noICU =
+  SMH_admission$Number.of.Inpatients.on.Any.Service.Per.Day - SMH_admission$Number.of.Inpatients.in.an.ICU.Per.Day
+
+
 Num_inpatient_medicine =
   SMH_admission %>%
   group_by(Month, Day) %>%
@@ -131,9 +136,9 @@ Num_inpatient_medicine =
             med_inpatients_anyservice = median(Number.of.Inpatients.on.Any.Service.Per.Day),
             high_inpatients_anyservice = max(Number.of.Inpatients.on.Any.Service.Per.Day),
             
-            low_inpatients_medicine = min(Number.of.Inpatients.on.Medicine.Per.Day),
-            med_inpatients_medicine = median(Number.of.Inpatients.on.Medicine.Per.Day),
-            high_inpatients_medicine = max(Number.of.Inpatients.on.Medicine.Per.Day),
+            low_inpatients_noICU = min(Number.of.Inpatients.noICU),
+            med_inpatients_noICU = median(Number.of.Inpatients.noICU),
+            high_inpatients_noICU = max(Number.of.Inpatients.noICU),
             
             low_inpatients_ICU = min(Number.of.Inpatients.in.an.ICU.Per.Day),
             med_inpatients_ICU = median(Number.of.Inpatients.in.an.ICU.Per.Day),
@@ -152,6 +157,14 @@ Num_inpatients$time = as.numeric(rownames(Num_inpatients)) - 1
 
 summary(Num_inpatients$med_inpatients_anyservice)
 summary(Num_inpatients$med_inpatients_ICU)
+summary(Num_inpatients$med_inpatients_noICU)
+
+
+# Num_inpatients$total_inpatient_predicted = Num_inpatients$med_inpatients_anyservice + output_hospital_restrictionR0default_results$I_ch *smh
+
+Num_inpatients[, c("time", "med_inpatients_noICU")]
+
+
 
 ###############################################################################
 ###Figure 4. Estimated surge and capacity for hospitalization and intensive care at 
@@ -174,7 +187,7 @@ modelresults_FSD = subset(modelresults, Scenario %in% c("fast/large", "slow/smal
    ggplot() +
    geom_line(data = subset(modelresults, Scenario %in% c("fast/large", "slow/small", "default")), 
              aes(x = time, y = I_ch *smh_inpatients + 
-                   subset(Num_inpatients, time <= 90)$med_inpatients_anyservice, 
+                   subset(Num_inpatients, time <= 90)$med_inpatients_noICU, 
                  group = Scenario, colour = Scenario), size = 1.2) +
    xlab('Days since outbreak started') +
    ylab('Prevalent number of non-ICU inpatients at SMH,\n including patients with and without COVID-19')+ 
@@ -185,13 +198,13 @@ modelresults_FSD = subset(modelresults, Scenario %in% c("fast/large", "slow/smal
          axis.line = element_line(colour = "black")) +
    scale_x_continuous(breaks = seq(0, 90, by = 5))+
    # scale_y_continuous(breaks = seq(0, 510, by = 10))+
-   # ylim(300, 700) + ##bed limit 476
-   geom_hline(yintercept=476, linetype="dashed", color = "red", size = 1.2)+ 
-   geom_text(aes(15, 476, label="Inpatient bed capacity", vjust=-1), color = "red", size = 6)+ 
+   ylim(0, 2400) + ##bed limit 476
+   geom_hline(yintercept= 476 - 71 , linetype="dashed", color = "red", size = 1.2)+ 
+   geom_text(aes(15, 476 - 71, label="Inpatient bed capacity", vjust=-1), color = "red", size = 6)+ 
    # guides(color = FALSE, size = FALSE) +
    ggtitle("A)")  + 
    geom_line(aes(x = subset(Num_inpatients, time <= 90)$time, 
-                 y = subset(Num_inpatients, time <= 90)$med_inpatients_anyservice, 
+                 y = subset(Num_inpatients, time <= 90)$med_inpatients_noICU, 
                  color = "pre-outbreak non-COVID\n non-ICU inpatients*"), size = 1.2) +
     scale_color_manual(breaks = c("default", 
                                   "fast/large", 
@@ -202,13 +215,13 @@ modelresults_FSD = subset(modelresults, Scenario %in% c("fast/large", "slow/smal
                                   "slow/small" = "#619CFF", 
                                   "pre-outbreak non-COVID\n non-ICU inpatients*" = "black")))
 
-ggsave("../fig/anyserivces_90_predict_SMH.png", width = 14, height = 10)
+ggsave("../fig/anyservicesNOicu_90_predict_SMH.png", width = 14, height = 10)
 
 (anyserivces_90_predict_cuty = 
     ggplot() +
     geom_line(data = subset(modelresults, Scenario %in% c("fast/large", "slow/small", "default")), 
               aes(x = time, y = I_ch *smh_inpatients + 
-                    subset(Num_inpatients, time <= 90)$med_inpatients_anyservice, 
+                    subset(Num_inpatients, time <= 90)$med_inpatients_noICU, 
                   group = Scenario, colour = Scenario), size = 1.2) +
     xlab('Days since outbreak started') +
     # ylab('Number of inpatients at SMH,\n including patients with COVID-19')+ 
@@ -226,7 +239,7 @@ ggsave("../fig/anyserivces_90_predict_SMH.png", width = 14, height = 10)
     # guides(color = FALSE, size = FALSE) +
     ggtitle("B)")  + 
     geom_line(aes(x = subset(Num_inpatients, time <= 90)$time, 
-                  y = subset(Num_inpatients, time <= 90)$med_inpatients_anyservice, 
+                  y = subset(Num_inpatients, time <= 90)$med_inpatients_noICU, 
                   color = "pre-outbreak non-COVID non-ICU inpatients*"), size = 1.2) +
     scale_color_manual(breaks = c("default", 
                                   "fast/large", 
@@ -239,7 +252,7 @@ ggsave("../fig/anyserivces_90_predict_SMH.png", width = 14, height = 10)
     theme(legend.position = "none"))
 
 
-ggsave("../fig/anyserivces_90_predict_SMH_cuty.png", width = 12, height = 10)
+ggsave("../fig/anyservicesNOicu_90_predict_SMH_cuty.png", width = 12, height = 10)
 
 
 ###################################################
@@ -260,7 +273,7 @@ ggsave("../fig/anyserivces_90_predict_SMH_cuty.png", width = 12, height = 10)
          axis.line = element_line(colour = "black")) +
    scale_x_continuous(breaks = seq(0, 90, by = 5))+
    # scale_y_continuous(breaks = seq(0, 510, by = 10))+
-   # ylim(300, 700) + ##bed limit 476
+   ylim(0, 1000) + ##bed limit 476
    geom_hline(yintercept=71, linetype="dashed", color = "red", size = 1.2)+ 
    geom_text(aes(10, 71, label="ICU bed capacity", vjust=-1), colour = "red",  size = 6)+ 
    # guides(color = FALSE, size = FALSE) +
@@ -343,6 +356,10 @@ SJ_admission = SJ_admission %>% separate(DayMonthYear, c("Day", "Month", "Year")
 SJ_admission$Day = str_pad(SJ_admission$Day, 2, pad = "0")
 SJ_admission$Month = str_pad(SJ_admission$Month, 2, pad = "0")
 
+SJ_admission$Number.of.Inpatients.noICU =
+  SJ_admission$Number.of.Inpatients.on.Any.Service.Per.Day - SJ_admission$Number.of.Inpatients.in.an.ICU.Per.Day
+
+
 Num_inpatient_medicine_SJ =
   SJ_admission %>%
   group_by(Month, Day) %>%
@@ -350,9 +367,9 @@ Num_inpatient_medicine_SJ =
             med_inpatients_anyservice = median(Number.of.Inpatients.on.Any.Service.Per.Day),
             high_inpatients_anyservice = max(Number.of.Inpatients.on.Any.Service.Per.Day),
             
-            low_inpatients_medicine = min(Number.of.Inpatients.on.Medicine.Per.Day),
-            med_inpatients_medicine = median(Number.of.Inpatients.on.Medicine.Per.Day),
-            high_inpatients_medicine = max(Number.of.Inpatients.on.Medicine.Per.Day),
+            low_inpatients_noICU = min(Number.of.Inpatients.noICU),
+            med_inpatients_noICU = median(Number.of.Inpatients.noICU),
+            high_inpatients_noICU = max(Number.of.Inpatients.noICU),
             
             low_inpatients_ICU = min(Number.of.Inpatients.in.an.ICU.Per.Day),
             med_inpatients_ICU = median(Number.of.Inpatients.in.an.ICU.Per.Day),
@@ -371,6 +388,9 @@ Num_inpatients_SJ$time = as.numeric(rownames(Num_inpatients_SJ)) - 1
 
 summary(Num_inpatient_medicine_SJ$med_inpatients_anyservice)
 summary(Num_inpatient_medicine_SJ$med_inpatients_ICU)
+summary(Num_inpatient_medicine_SJ$med_inpatients_noICU)
+
+Num_inpatients_SJ[, c("time", "med_inpatients_noICU")]
 
 ######################################################################################################
 ######################################################################################################
@@ -381,7 +401,7 @@ summary(Num_inpatient_medicine_SJ$med_inpatients_ICU)
    ggplot() +
    geom_line(data = subset(modelresults, Scenario %in% c("fast/large", "slow/small", "default")), 
              aes(x = time, y = I_ch *sj_inpatients + 
-                   subset(Num_inpatients_SJ, time <= 90)$med_inpatients_anyservice, group = Scenario, colour = Scenario), size = 1.2) +
+                   subset(Num_inpatients_SJ, time <= 90)$med_inpatients_noICU, group = Scenario, colour = Scenario), size = 1.2) +
    xlab('Days since outbreak started') +
    ylab('Prevalent number of non-ICU inpatients at SJH,\n including patients with and without COVID-19')+ 
    theme_bw(base_size = 18) + 
@@ -391,13 +411,13 @@ summary(Num_inpatient_medicine_SJ$med_inpatients_ICU)
          axis.line = element_line(colour = "black")) +
    scale_x_continuous(breaks = seq(0, 90, by = 5))+
    # scale_y_continuous(breaks = seq(0, 510, by = 10))+
-   # ylim(300, 700) + ##bed limit 439 = 415 + 24
-   geom_hline(yintercept=439, linetype="dashed", color = "red", size = 1.2)+ 
-   geom_text(aes(15, 439, label="Inpatient bed capacity", vjust=-1), color = "red", size = 6)+ 
+   ylim(0, 2000) + ##bed limit 439 = 415 + 24
+   geom_hline(yintercept = 439 - 32, linetype="dashed", color = "red", size = 1.2)+ 
+   geom_text(aes(15, 439 - 32, label="Inpatient bed capacity", vjust=-1), color = "red", size = 6)+ 
    # guides(color = FALSE, size = FALSE) +
    ggtitle("A)")  + 
    geom_line(aes(x = subset(Num_inpatients_SJ, time <= 90)$time, 
-                 y = subset(Num_inpatients_SJ, time <= 90)$med_inpatients_anyservice, 
+                 y = subset(Num_inpatients_SJ, time <= 90)$med_inpatients_noICU, 
                  color = "pre-outbreak non-COVID\n non-ICU inpatients*"), size = 1.2) +
    scale_color_manual(breaks = c("default", 
                                  "fast/large", 
@@ -408,14 +428,14 @@ summary(Num_inpatient_medicine_SJ$med_inpatients_ICU)
                                  "slow/small" = "#619CFF", 
                                  "pre-outbreak non-COVID\n non-ICU inpatients*" = "black")))
 
-ggsave("../fig/anyserivces_90_predict_SJ.png", width = 14, height = 10)
+ggsave("../fig/anyservicesNOicu_90_predict_SJ.png", width = 14, height = 10)
 
 
 (anyserivces_90_predict_SJ_cuty = 
     ggplot() +
     geom_line(data = subset(modelresults, Scenario %in% c("fast/large", "slow/small", "default")), 
               aes(x = time, y = I_ch *sj_inpatients + 
-                    subset(Num_inpatients_SJ, time <= 90)$med_inpatients_anyservice, group = Scenario, colour = Scenario), size = 1.2) +
+                    subset(Num_inpatients_SJ, time <= 90)$med_inpatients_noICU, group = Scenario, colour = Scenario), size = 1.2) +
     xlab('Days since outbreak started') +
     ylab('')+ 
     theme_bw(base_size = 24) + 
@@ -426,12 +446,12 @@ ggsave("../fig/anyserivces_90_predict_SJ.png", width = 14, height = 10)
     scale_x_continuous(breaks = seq(0, 90, by = 5))+
     # scale_y_continuous(breaks = seq(0, 510, by = 10))+
     ylim(200, 600) + ##bed limit 439 = 415 + 24
-    geom_hline(yintercept=439, linetype="dashed", color = "red", size = 1.2)+ 
-    geom_text(aes(15, 439, label="Inpatient bed capacity", vjust=-1), color = "red", size = 6)+ 
+    geom_hline(yintercept=439 - 32, linetype="dashed", color = "red", size = 1.2)+ 
+    geom_text(aes(15, 439 - 32, label="Inpatient bed capacity", vjust=-1), color = "red", size = 6)+ 
     # guides(color = FALSE, size = FALSE) +
     ggtitle("B)")  + 
     geom_line(aes(x = subset(Num_inpatients_SJ, time <= 90)$time, 
-                  y = subset(Num_inpatients_SJ, time <= 90)$med_inpatients_anyservice, 
+                  y = subset(Num_inpatients_SJ, time <= 90)$med_inpatients_noICU, 
                   color = "pre-outbreak non-COVID\n non-ICU inpatients*"), size = 1.2) +
     scale_color_manual(breaks = c("default", 
                                   "fast/large", 
@@ -444,7 +464,7 @@ ggsave("../fig/anyserivces_90_predict_SJ.png", width = 14, height = 10)
     theme(legend.position = "none")
   )
 
-ggsave("../fig/anyserivces_90_predict_SJ_cuty.png", width = 12, height = 10)
+ggsave("../fig/anyservicesNOicu_90_predict_SJ_cuty.png", width = 12, height = 10)
 
 
 ###################################################
