@@ -234,8 +234,8 @@ ggsave("../fig/anyservicesNOicu_90_predict_SMH.png", width = 14, height = 10)
     scale_x_continuous(breaks = seq(0, 90, by = 5))+
     # scale_y_continuous(breaks = seq(0, 510, by = 10))+
     ylim(300, 700) + ##bed limit 476
-    geom_hline(yintercept=476, linetype="dashed", color = "red", size = 1.2)+ 
-    geom_text(aes(15, 476, label="Inpatient bed capacity", vjust=-1), color = "red", size = 6)+ 
+    geom_hline(yintercept=476 - 71, linetype="dashed", color = "red", size = 1.2)+ 
+    geom_text(aes(15, 476 - 71, label="Inpatient bed capacity", vjust=-1), color = "red", size = 6)+ 
     # guides(color = FALSE, size = FALSE) +
     ggtitle("B)")  + 
     geom_line(aes(x = subset(Num_inpatients, time <= 90)$time, 
