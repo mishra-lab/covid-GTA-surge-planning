@@ -12,7 +12,7 @@
 | [`src/`](src/) | The main source code powering the [shiny application](https://mishra-lab.shinyapps.io/covid-GTA-surge-planning/). |
 | [`paper/`](paper/) | Contains the full R code of the model, input data, figures and the main manuscript text. |
 | [`reports/`](reports/) | Contains the latest PDF versions of our reports to Unity Health Toronto Infection Prevention and Control (IPAC). |
-| [`data/`](data/) | Contains an up-to-date timeseries of confirmed COVID-19 cases in the Greater Toronto Area, broken down by region. |
+| [`data/`](data/) | Contains a timeseries (January 25 to June 7, 2020) of confirmed COVID-19 cases in the Greater Toronto Area, broken down by region. |
 
 ## Running the shiny application from source
 1. Clone the repository and `cd` into the `src` directory.
